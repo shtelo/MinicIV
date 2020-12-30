@@ -5,7 +5,7 @@ from discord import Message
 from discord.ext import commands
 from discord.ext.commands import Bot, Context
 
-from manager import EconomyManager
+from manager import EconomyManager, UpdownGame
 from util import get_strings
 
 
