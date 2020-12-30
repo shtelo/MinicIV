@@ -8,8 +8,7 @@ from discord import Message, Member, Embed, VoiceChannel
 from discord.ext import commands, tasks
 from discord.ext.commands import Bot, Context, MemberConverter, MemberNotFound
 
-from manager import TypingManager, TypingGame, BabelManager, AttendanceManager
-from manager.dice import Dice
+from manager import TypingManager, TypingGame, BabelManager, AttendanceManager, Dice
 from util import datetime, get_keys, get_strings, get_const
 
 

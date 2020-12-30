@@ -6,17 +6,12 @@ from discord.ext.commands import Bot, Context, CommandNotFound, CommandError, Te
 from pymysql.cursors import DictCursor
 
 from cogs.shtelo.bot_protocol import BotProtocol, Request
+from manager import Memo
 from util import eul_reul, euro, i_ga, database, load_strings, get_strings, eun_neun, a_ya
 
 
 def strings():
     return get_strings()['cog']['util']
-
-
-class Memo:
-    def __init__(self, content: str, author_id: int):
-        self.content: str = content
-        self.author_id: int = author_id
 
 
 class MemoManager:

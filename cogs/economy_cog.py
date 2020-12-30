@@ -1,74 +1,16 @@
 import re
 from asyncio import TimeoutError as AsyncioTimeoutError
-from random import randint
 
 from discord import Message
 from discord.ext import commands
 from discord.ext.commands import Bot, Context
-from pymysql.cursors import DictCursor
 
-from util import get_strings, database
+from manager import EconomyManager
+from util import get_strings
 
 
 def strings():
     return get_strings()['cog']['economy']
-
-
-class EconomyManager:
-    @staticmethod
-    def get_account(member_id: int) -> dict:
-        with database.cursor(DictCursor) as cursor:
-            cursor.execute('SELECT * FROM wallet WHERE id = %s;', member_id)
-            if data := cursor.fetchall():
-                return data[0]
-            else:
-                return dict()
-
-    @staticmethod
-    def new_account(member_id: int, *, force: bool = True) -> dict:
-        if force or not EconomyManager.get_account(member_id):
-            with database.cursor() as cursor:
-                cursor.execute('INSERT INTO wallet VALUES(%s, 0.0);', member_id)
-            database.commit()
-        return EconomyManager.get_account(member_id)
-
-    @staticmethod
-    def give(member_id: int, amount: float):
-        account = EconomyManager.get_account(member_id)
-        with database.cursor() as cursor:
-            cursor.execute('UPDATE wallet SET property = %s WHERE id = %s;', (account['property'] + amount, member_id))
-        database.commit()
-
-
-class UpdownGame:
-    """Updown 게임 객체입니다."""
-
-    SAY_DOWN = 1
-    SAY_UP = -1
-    SAY_CORRECT = 0
-
-    def __init__(self, range_: int):
-        self.range = range_
-        self.number = randint(1, self.range)
-        self.tries = 0
-
-    def guess(self, guessing_number: int) -> int:
-        """
-        숫자를 예상합니다.
-        :param guessing_number: 예상할 숫자
-        :return: 이 숫자가 게임의 숫자보다 큰지 작은지 같은지
-        """
-        self.tries += 1
-        if guessing_number > self.number:
-            return UpdownGame.SAY_DOWN
-        elif guessing_number < self.number:
-            return UpdownGame.SAY_UP
-        else:
-            return UpdownGame.SAY_CORRECT
-
-    @staticmethod
-    def get_receive(tries: int, stake: float) -> float:
-        return max((54 / tries - 4) / 5, 0) * stake
 
 
 class EconomyCog(commands.Cog):
