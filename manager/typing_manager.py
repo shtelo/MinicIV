@@ -1,10 +1,11 @@
+from datetime import datetime
 from random import choice
 from typing import Optional
 
 from discord import TextChannel, Message
 from pymysql.cursors import DictCursor
 
-from util import database, datetime, get_keys
+from util import database, get_keys
 
 
 class TypingGame:

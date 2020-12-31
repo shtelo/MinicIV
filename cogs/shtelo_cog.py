@@ -1,11 +1,11 @@
 from asyncio import wait
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 from discord import Member, Embed
 from discord.ext import commands
 from discord.ext.commands import Bot, Context
 
-from util import get_strings, get_const, datetime
+from util import get_strings, get_const
 
 
 def strings():

@@ -12,4 +12,4 @@ for file_name in listdir('./cogs'):
         client.load_extension(f'cogs.{file_name[:-3]}')
         print(f'`{file_name}` Cog가 준비되었습니다.')
 
-client.run(environ['BOT_TOKEN'])
+client.run(environ['MINIC_BOT_TOKEN'])

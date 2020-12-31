@@ -1,6 +1,6 @@
 import re
 from asyncio import TimeoutError as AsyncioTimeoutError, wait
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 from random import choice, randint
 from typing import Optional
 
@@ -9,7 +9,7 @@ from discord.ext import commands, tasks
 from discord.ext.commands import Bot, Context, MemberConverter, MemberNotFound
 
 from manager import TypingManager, TypingGame, BabelManager, AttendanceManager, Dice
-from util import datetime, get_keys, get_strings, get_const
+from util import get_keys, get_strings, get_const
 
 
 def strings():
