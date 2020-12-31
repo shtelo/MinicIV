@@ -3,67 +3,14 @@ from asyncio import wait, TimeoutError as AsyncioTimeoutError
 from discord import VoiceChannel, Message
 from discord.ext import commands
 from discord.ext.commands import Bot, Context, CommandNotFound, CommandError, TextChannelConverter
-from pymysql.cursors import DictCursor
 
 from cogs.shtelo.bot_protocol import BotProtocol, Request
-from manager import Memo
-from util import eul_reul, euro, i_ga, database, load_strings, get_strings, eun_neun, a_ya
+from manager import Memo, MemoManager
+from util import eul_reul, euro, i_ga, load_strings, get_strings, eun_neun, a_ya
 
 
 def strings():
     return get_strings()['cog']['util']
-
-
-class MemoManager:
-    @staticmethod
-    def get(key: str) -> Memo:
-        with database.cursor(DictCursor) as cursor:
-            cursor.execute(f'SELECT * FROM memos WHERE `key` = %s;', key)
-            result = cursor.fetchall()[0]
-            return Memo(result['value'], result['author_id'])
-
-    @staticmethod
-    def get_value(key: str) -> str:
-        with database.cursor(DictCursor) as cursor:
-            cursor.execute(f'SELECT value FROM memos WHERE `key` = %s;', key)
-            data = cursor.fetchall()
-            return data[0]['value']
-
-    @staticmethod
-    def get_keys() -> tuple:
-        cursor = database.cursor()
-        cursor.execute('SELECT `key` FROM memos;')
-        return tuple([column[0] for column in cursor.fetchall()])
-
-    @staticmethod
-    def get_author_id(key: str) -> int:
-        with database.cursor(DictCursor) as cursor:
-            cursor.execute(f'SELECT author_id FROM memos WHERE `key` = %s;', key)
-            data = cursor.fetchall()
-            return data[0]['author_id']
-
-    @staticmethod
-    def insert(key: str, memo: Memo):
-        cursor = database.cursor()
-        cursor.execute('INSERT INTO memos VALUES(%s, %s, %s);', (key, memo.content, memo.author_id))
-        database.commit()
-
-    @staticmethod
-    def update(key: str, memo: Memo):
-        cursor = database.cursor()
-        cursor.execute('UPDATE memos SET value = %s WHERE `key` = %s;', (memo.content, key))
-        database.commit()
-
-    @staticmethod
-    def delete(key: str):
-        cursor = database.cursor()
-        cursor.execute('DELETE FROM memos WHERE `key` = %s;', key)
-        database.commit()
-
-    @staticmethod
-    def is_key(key: str) -> bool:
-        cursor = database.cursor()
-        return cursor.execute('SELECT * FROM memos WHERE `key` = %s;', key)
 
 
 class MinicProtocol(BotProtocol):
