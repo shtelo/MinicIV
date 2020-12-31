@@ -22,6 +22,7 @@ class EconomyCog(commands.Cog):
                       description=strings()['command']['money']['description'])
     async def money(self, ctx: Context):
         if account := EconomyManager.get_account(ctx.author.id):
+            EconomyManager.give(ctx.author.id, 1)
             await ctx.send(strings()['command']['money']['strings']['template'].format(
                 mention=ctx.author.mention, amount=account['property'], currency=self.currency))
         else:
