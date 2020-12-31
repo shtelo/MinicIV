@@ -72,7 +72,7 @@ class EconomyCog(commands.Cog):
                 await ctx.send(strings()['command']['updown']['strings']['number_is_small'].format(
                     mention=ctx.author.mention, number=guessing_number, tries=game.tries))
             else:
-                times = UpdownGame.get_receive(game.tries, stake)
+                times = UpdownGame.get_receive(game.tries)
                 amount = stake * times
                 await ctx.send(strings()['command']['updown']['strings']['number_is_correct'].format(
                     mention=ctx.author.mention, tries=game.tries, times=times, amount=amount, currency=self.currency))
@@ -84,10 +84,10 @@ class EconomyCog(commands.Cog):
     async def updown_receive(self, ctx: Context, stake: float = 10):
         await ctx.send(strings()['command']['updown.receive']['strings']['template'].format(
             stake=stake, currency=self.currency,
-            r1=UpdownGame.get_receive(1, stake), r2=UpdownGame.get_receive(2, stake),
-            r3=UpdownGame.get_receive(3, stake), r4=UpdownGame.get_receive(4, stake),
-            r5=UpdownGame.get_receive(5, stake), r6=UpdownGame.get_receive(6, stake),
-            r7=UpdownGame.get_receive(7, stake)))
+            r1=UpdownGame.get_receive(1) * stake, r2=UpdownGame.get_receive(2) * stake,
+            r3=UpdownGame.get_receive(3) * stake, r4=UpdownGame.get_receive(4) * stake,
+            r5=UpdownGame.get_receive(5) * stake, r6=UpdownGame.get_receive(6) * stake,
+            r7=UpdownGame.get_receive(7) * stake))
 
 
 def setup(client: Bot):

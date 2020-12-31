@@ -28,5 +28,5 @@ class UpdownGame:
             return UpdownGame.SAY_CORRECT
 
     @staticmethod
-    def get_receive(tries: int, stake: float) -> float:
-        return max((54 / tries - 4) / 5, 0) * stake
+    def get_receive(tries: int) -> float:
+        return max((54 / tries - 4) / 5, 0)
