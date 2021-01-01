@@ -2,7 +2,7 @@ from asyncio import wait, TimeoutError as AsyncioTimeoutError
 
 from discord import VoiceChannel, Message
 from discord.ext import commands
-from discord.ext.commands import Bot, Context, CommandNotFound, CommandError, TextChannelConverter
+from discord.ext.commands import Bot, Context, CommandNotFound, CommandError, TextChannelConverter, MemberConverter
 
 from cogs.shtelo.bot_protocol import BotProtocol, Request
 from manager import Memo, MemoManager
@@ -50,9 +50,8 @@ class Util(commands.Cog):
                       description=strings()['command']['move']['description'])
     async def move(self, ctx: Context, from_channel: VoiceChannel, to_channel: VoiceChannel):
         tasks = []
-        print(from_channel.members)
-        for member in from_channel.members:
-            tasks.append(member.edit(voice_channel=to_channel))  # todo this has error
+        for member_id in from_channel.voice_states.keys():
+            tasks.append((await MemberConverter().convert(ctx, member_id)).edit(voice_channel=to_channel))
         await wait(tasks)
 
     @commands.command(aliases=strings()['command']['gather']['name'],
