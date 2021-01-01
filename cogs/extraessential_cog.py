@@ -276,6 +276,19 @@ class ExtraessentialCog(commands.Cog):
             await ctx.send(strings()['command']['attendance.check']['strings']['today'].format(
                 name=member.display_name, strike=attendance['strike']))
 
+    @attendance.command(aliases=strings()['command']['attendance.leaderboard']['name'],
+                        description=strings()['command']['attendance.leaderboard']['description'])
+    async def attendance_leaderboard(self, ctx: Context):
+        description = []
+        for i, leader in enumerate(AttendanceManager.get_leaderboard()):
+            member_id, strike, date_ = leader
+            description.append(strings()['command']['attendance.leaderboard']['strings']['template'].format(
+                place=i + 1, member=await MemberConverter().convert(ctx, member_id), strike=strike,
+                did_today=':fire:' if date_ == date.today() else ''))
+        embed = Embed(title=strings()['command']['attendance.leaderboard']['strings']['embed_title'],
+                      description='\n'.join(description), colour=get_const()['color']['sch_vanilla'])
+        await ctx.send(embed=embed)
+
     @commands.group(aliases=strings()['command']['babel']['name'],
                     description=strings()['command']['babel']['description'])
     async def babel(self, ctx: Context):

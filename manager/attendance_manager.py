@@ -39,3 +39,9 @@ class AttendanceManager:
                 cursor.execute('UPDATE attendance SET strike = 1, date = %s WHERE member_id = %s', (today, member_id))
                 database.commit()
                 return 1
+
+    @staticmethod
+    def get_leaderboard() -> tuple:
+        with database.cursor() as cursor:
+            cursor.execute('SELECT * FROM attendance ORDER BY strike DESC')
+            return cursor.fetchall()
