@@ -4,7 +4,7 @@ from datetime import date, timedelta, datetime
 from random import choice, randint
 from typing import Optional
 
-from discord import Message, Member, Embed, VoiceChannel, Guild, Emoji
+from discord import Message, Member, Embed, VoiceChannel, Guild
 from discord.ext import commands, tasks
 from discord.ext.commands import Bot, Context, MemberConverter, MemberNotFound
 
