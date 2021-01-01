@@ -34,6 +34,9 @@ class ShteloCog(commands.Cog):
     @commands.group(aliases=strings()['command']['shtelian_calendar']['name'],
                     description=strings()['command']['shtelian_calendar']['description'])
     async def shtelian_calendar(self, ctx: Context, *args):
+        if not args:
+            await ctx.send(str(ShteloTime.by_datetime(datetime.today())))
+            return
         try:
             await self.to_shtelian_calendar(ctx, *args)
         except ValueError:
