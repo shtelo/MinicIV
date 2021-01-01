@@ -5,6 +5,7 @@
     "o": "⭕",
     "x": "❌"
   },
+  "message_log_template": "{datetime} [{guild}(guild_id)#{channel}({channel_id})] {author}({author_id}) : {content}",
   "cog": {
     "music": {
       "command": {

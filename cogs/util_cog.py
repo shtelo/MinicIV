@@ -1,4 +1,5 @@
 from asyncio import wait, TimeoutError as AsyncioTimeoutError
+from datetime import datetime
 
 from discord import VoiceChannel, Message
 from discord.ext import commands
@@ -37,6 +38,11 @@ class Util(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, message: Message):
         await self.bot_protocol.on_message(message)
+
+        print(get_strings()['message_log_template'].format(
+            datetime=datetime.now(), guild=message.guild, guild_id=message.guild.id,
+            channel=message.channel, channel_id=message.channel.id,
+            author=message.author, author_id=message.author.id, content=message.content))
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx: Context, error: CommandError):
