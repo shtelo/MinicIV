@@ -313,12 +313,25 @@
         },
         "emoji_reaction.remove": {
           "name": [
-            "삭제"
+            "삭제",
+            "제거",
+            "해제"
           ],
           "description": "반응 목록에서 반응을 삭제합니다.",
           "strings": {
             "no_reaction": "`{keyword} → {emoji}` 반응이 없습니다.",
             "succeed": "반응 `{keyword} → {emoji}`{i_ga} 삭제되었습니다."
+          }
+        },
+        "emoji_reaction.refresh": {
+          "name": [
+            "재구성",
+            "새로고침",
+            "동기화"
+          ],
+          "description": "반응 목록을 새로고침합니다.",
+          "strings": {
+            "succeed": "반응 {count}개가 새로고침 되었습니다."
           }
         }
       }

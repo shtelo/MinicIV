@@ -347,6 +347,15 @@ class ExtraessentialCog(commands.Cog):
         await ctx.send(strings()['command']['emoji_reaction.remove']['strings']['succeed'].format(
             keyword=keyword, emoji=emoji_unicode, i_ga=i_ga(keyword)))
 
+    @emoji_reaction.command(aliases=strings()['command']['emoji_reaction.refresh']['name'],
+                            description=strings()['command']['emoji_reaction.refresh']['description'])
+    async def emoji_reaction_refresh(self, ctx: Context):
+        map_ = self.emoji_reaction_manager.refresh_reactions()
+        count = 0
+        for reactions in map_.values():
+            count += len(reactions)
+        await ctx.send(strings()['command']['emoji_reaction.refresh']['strings']['succeed'].format(count=count))
+
 
 def setup(client: Bot):
     client.add_cog(ExtraessentialCog(client))
