@@ -3,10 +3,11 @@ from datetime import datetime
 
 from discord import VoiceChannel, Message
 from discord.ext import commands
-from discord.ext.commands import Bot, Context, CommandNotFound, CommandError, TextChannelConverter, MemberConverter
+from discord.ext.commands import Bot, Context, CommandNotFound, CommandError, TextChannelConverter
 
 from cogs.shtelo.bot_protocol import BotProtocol, Request
 from manager import Memo, MemoManager
+from manager.member_cache import MemberCache
 from util import eul_reul, euro, i_ga, load_strings, get_strings, eun_neun, a_ya
 
 
@@ -34,6 +35,7 @@ class Util(commands.Cog):
     def __init__(self, client: Bot):
         self.client = client
         self.bot_protocol = MinicProtocol(self.client)
+        self.member_cache = MemberCache()
 
     @commands.Cog.listener()
     async def on_message(self, message: Message):
@@ -57,7 +59,7 @@ class Util(commands.Cog):
     async def move(self, ctx: Context, from_channel: VoiceChannel, to_channel: VoiceChannel):
         tasks = []
         for member_id in from_channel.voice_states.keys():
-            tasks.append((await MemberConverter().convert(ctx, member_id)).edit(voice_channel=to_channel))
+            tasks.append((await self.member_cache.get_member(member_id, ctx)).edit(voice_channel=to_channel))
         await wait(tasks)
 
     @commands.command(aliases=strings()['command']['gather']['name'],

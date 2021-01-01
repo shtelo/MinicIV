@@ -6,9 +6,10 @@ from typing import Optional
 
 from discord import Message, Member, Embed, VoiceChannel, Guild
 from discord.ext import commands, tasks
-from discord.ext.commands import Bot, Context, MemberConverter, MemberNotFound
+from discord.ext.commands import Bot, Context, MemberNotFound
 
 from manager import TypingManager, TypingGame, BabelManager, AttendanceManager, Dice, EmojiReactionManager
+from manager.member_cache import MemberCache
 from util import get_keys, get_strings, get_const, i_ga
 
 
@@ -23,6 +24,7 @@ class ExtraessentialCog(commands.Cog):
         self.babel_buffer = dict()
         self.shtelo_guild: Optional[Guild] = None
         self.emoji_reaction_manager = EmojiReactionManager()
+        self.member_cache = MemberCache()
 
         self.babel_upper.start()
         self.babel_gravity.start()
@@ -233,10 +235,9 @@ class ExtraessentialCog(commands.Cog):
             language = -1
         records = TypingManager.get_records_ordered(limit, language)
         contents = []
-        member_converter = MemberConverter()
         for i, record in enumerate(records):
             try:
-                member = await member_converter.convert(ctx, record['author'])
+                member = await self.member_cache.get_member(record['author'], ctx)
             except MemberNotFound:
                 TypingManager.delete_record(record['author'])
                 continue
@@ -283,7 +284,7 @@ class ExtraessentialCog(commands.Cog):
         for i, leader in enumerate(AttendanceManager.get_leaderboard()):
             member_id, strike, date_ = leader
             description.append(strings()['command']['attendance.leaderboard']['strings']['template'].format(
-                place=i + 1, member=await MemberConverter().convert(ctx, member_id), strike=strike,
+                place=i + 1, member=await self.member_cache.get_member(member_id, ctx), strike=strike,
                 did_today=':fire:' if date_ == date.today() else ''))
         embed = Embed(title=strings()['command']['attendance.leaderboard']['strings']['embed_title'],
                       description='\n'.join(description), colour=get_const()['color']['sch_vanilla'])
@@ -297,7 +298,7 @@ class ExtraessentialCog(commands.Cog):
             description = []
             for i, leader in enumerate(leaderboard):
                 floor = leader['floor']
-                member = await MemberConverter().convert(ctx, leader['member_id'])
+                member = await self.member_cache.get_member(leader['member_id'], ctx)
                 description.append(strings()['command']['babel']['strings']['template'].format(
                     place=i + 1, display_name=member.display_name, floor=floor))
             description = '\n'.join(description)
