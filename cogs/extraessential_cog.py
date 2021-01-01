@@ -284,7 +284,7 @@ class ExtraessentialCog(commands.Cog):
         for i, leader in enumerate(AttendanceManager.get_leaderboard()):
             member_id, strike, date_ = leader
             description.append(strings()['command']['attendance.leaderboard']['strings']['template'].format(
-                place=i + 1, member=await self.member_cache.get_member(member_id, ctx), strike=strike,
+                place=i + 1, member=(await self.member_cache.get_member(member_id, ctx)).display_name, strike=strike,
                 did_today=':fire:' if date_ == date.today() else ''))
         embed = Embed(title=strings()['command']['attendance.leaderboard']['strings']['embed_title'],
                       description='\n'.join(description), colour=get_const()['color']['sch_vanilla'])
