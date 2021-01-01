@@ -27,3 +27,4 @@ class BabelManager:
                 cursor.execute('UPDATE babel SET floor = %s WHERE member_id = %s', (floor, member_id))
             else:
                 cursor.execute('INSERT INTO babel VALUES(%s, %s)', (member_id, max(delta, 1)))
+        database.commit()

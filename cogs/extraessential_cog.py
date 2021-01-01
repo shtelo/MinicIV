@@ -1,10 +1,10 @@
 import re
-from asyncio import TimeoutError as AsyncioTimeoutError, wait
+from asyncio import TimeoutError as AsyncioTimeoutError, wait, sleep
 from datetime import date, timedelta, datetime
 from random import choice, randint
 from typing import Optional
 
-from discord import Message, Member, Embed, VoiceChannel
+from discord import Message, Member, Embed, VoiceChannel, Guild
 from discord.ext import commands, tasks
 from discord.ext.commands import Bot, Context, MemberConverter, MemberNotFound
 
@@ -20,19 +20,32 @@ class ExtraessentialCog(commands.Cog):
     def __init__(self, client: Bot):
         self.client = client
         self.typing_manager = TypingManager()
+        self.babel_buffer = dict()
+        self.shtelo_guild: Optional[Guild] = None
+        self.babel_upper.start()
+        self.babel_gravity.start()
+
+    def cog_unload(self):
+        self.babel_upper.cancel()
+        self.babel_gravity.cancel()
 
     @tasks.loop(seconds=600.0)
     async def babel_upper(self):
-        print('gooder')
-        for channel in self.client.get_guild(get_const()['guild']['shtelo']).voice_channels:
-            for member in channel.members:
-                BabelManager.up(member, len(channel.members))
+        while not self.shtelo_guild:
+            await sleep(1)
+        for channel in self.shtelo_guild.voice_channels:
+            member_ids = channel.voice_states.keys()
+            for member_id in member_ids:
+                BabelManager.up(member_id, len(member_ids))
 
     @tasks.loop(seconds=3000.0)
-    async def babel_upper(self):
-        print('good')
+    async def babel_gravity(self):
         for leader in BabelManager.get_leaderboard():
             BabelManager.up(leader['member_id'], -3)
+
+    @commands.Cog.listener()
+    async def on_ready(self):
+        self.shtelo_guild = self.client.get_guild(get_const()['guild']['shtelo'])
 
     @commands.Cog.listener()
     async def on_voice_state_update(self, member: Member, before: VoiceChannel, after: VoiceChannel):
@@ -53,7 +66,14 @@ class ExtraessentialCog(commands.Cog):
                 await message.add_reaction(strings()['vote_reaction']['strings']['emojis'][i])
 
         if not message.author.bot:
-            BabelManager.up(message.author.id, len(message.content) // 30)
+            """babel"""
+            if message.author.id not in self.babel_buffer:
+                self.babel_buffer[message.author.id] = 0
+            self.babel_buffer[message.author.id] += len(message.content)
+            if self.babel_buffer[message.author.id] >= 30:
+                quotient = self.babel_buffer[message.author.id] // 30
+                self.babel_buffer[message.author.id] %= 30
+                BabelManager.up(message.author.id, quotient)
 
     @commands.command(aliases=strings()['command']['dice']['name'],
                       description=strings()['command']['dice']['description'])

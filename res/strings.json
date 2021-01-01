@@ -268,7 +268,7 @@
           ],
           "description": "바벨 층수를 확인합니다.",
           "strings": {
-            "template": "{place}. **@\u8203{display_name}** {floor}층",
+            "template": "{place}. **{display_name}** {floor}층",
             "no_leaderboard": "아직 기록이 없습니다!"
           }
         },
