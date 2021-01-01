@@ -4,12 +4,12 @@ from datetime import date, timedelta, datetime
 from random import choice, randint
 from typing import Optional
 
-from discord import Message, Member, Embed, VoiceChannel, Guild
+from discord import Message, Member, Embed, VoiceChannel, Guild, Emoji
 from discord.ext import commands, tasks
 from discord.ext.commands import Bot, Context, MemberConverter, MemberNotFound
 
-from manager import TypingManager, TypingGame, BabelManager, AttendanceManager, Dice
-from util import get_keys, get_strings, get_const
+from manager import TypingManager, TypingGame, BabelManager, AttendanceManager, Dice, EmojiReactionManager
+from util import get_keys, get_strings, get_const, i_ga
 
 
 def strings():
@@ -22,6 +22,8 @@ class ExtraessentialCog(commands.Cog):
         self.typing_manager = TypingManager()
         self.babel_buffer = dict()
         self.shtelo_guild: Optional[Guild] = None
+        self.emoji_reaction_manager = EmojiReactionManager()
+
         self.babel_upper.start()
         self.babel_gravity.start()
 
@@ -48,25 +50,19 @@ class ExtraessentialCog(commands.Cog):
         self.shtelo_guild = self.client.get_guild(get_const()['guild']['shtelo'])
 
     @commands.Cog.listener()
-    async def on_voice_state_update(self, member: Member, before: VoiceChannel, after: VoiceChannel):
-        if after is None:
-            if before is not None:
-                BabelManager.up(member.id, -len(before.members) * 3)
-
-    @commands.Cog.listener()
     async def on_message(self, message: Message):
+        """마법의 소라고둥 (`magic_conch`)"""
         if message.content.startswith(strings()['magic_conch']['strings']['invoker']):
-            """마법의 소라고둥 (`magic_conch`)"""
             answer = choice(strings()['magic_conch']['strings']['answers'])
             await message.channel.send(strings()['magic_conch']['strings']['template'].format(message=answer))
 
+        """vote reaction"""
         if re.compile(r'(.|\n)*\?\d+').match(message.content):
-            """`vote_reaction`"""
             for i in range(min(int(message.content.split('?')[-1]), 20)):
                 await message.add_reaction(strings()['vote_reaction']['strings']['emojis'][i])
 
+        """babel"""
         if not message.author.bot:
-            """babel"""
             if message.author.id not in self.babel_buffer:
                 self.babel_buffer[message.author.id] = 0
             self.babel_buffer[message.author.id] += len(message.content)
@@ -74,6 +70,19 @@ class ExtraessentialCog(commands.Cog):
                 quotient = self.babel_buffer[message.author.id] // 30
                 self.babel_buffer[message.author.id] %= 30
                 BabelManager.up(message.author.id, quotient)
+
+        """emoji reactions"""
+        if reactions := self.emoji_reaction_manager.get_reactions(message.content):
+            tasks_ = list()
+            for reaction in reactions:
+                tasks_.append(message.add_reaction(reaction))
+            await wait(tasks_)
+
+    @commands.Cog.listener()
+    async def on_voice_state_update(self, member: Member, before: VoiceChannel, after: VoiceChannel):
+        if after is None:
+            if before is not None:
+                BabelManager.up(member.id, -len(before.members) * 3)
 
     @commands.command(aliases=strings()['command']['dice']['name'],
                       description=strings()['command']['dice']['description'])
@@ -294,6 +303,49 @@ class ExtraessentialCog(commands.Cog):
         embed.add_field(name=strings()['command']['babel.condition']['strings']['down'],
                         value=strings()['command']['babel.condition']['strings']['down_condition'])
         await ctx.send(embed=embed)
+
+    @commands.group(aliases=strings()['command']['emoji_reaction']['name'],
+                    description=strings()['command']['emoji_reaction']['description'],
+                    invoke_without_command=True)
+    async def emoji_reaction(self, ctx: Context):
+        await self.emoji_reaction_list(ctx)
+
+    @emoji_reaction.command(aliases=strings()['command']['emoji_reaction.list']['name'],
+                            description=strings()['command']['emoji_reaction.list']['description'])
+    async def emoji_reaction_list(self, ctx: Context):
+        embed = Embed(title=strings()['command']['emoji_reaction.list']['strings']['embed_title'],
+                      color=get_const()['color']['sch_vanilla'])
+        i = 0
+        for emoji, reactions in self.emoji_reaction_manager.reactions.items():
+            if i >= 20:
+                break
+            embed.add_field(name=emoji,
+                            value='`' + '`, `'.join(reactions) + '`')
+            i += 1
+        await ctx.send(embed=embed)
+
+    @emoji_reaction.command(aliases=strings()['command']['emoji_reaction.add']['name'],
+                            description=strings()['command']['emoji_reaction.add']['description'])
+    async def emoji_reaction_add(self, ctx: Context, emoji_unicode: str, *, keyword: str):
+        if self.emoji_reaction_manager.is_reaction(emoji_unicode, keyword):
+            await ctx.send(strings()['command']['emoji_reaction.add']['strings']['duplicated'])
+            return
+
+        self.emoji_reaction_manager.add_reaction(emoji_unicode, keyword)
+        await ctx.send(strings()['command']['emoji_reaction.add']['strings']['succeed'].format(
+            keyword=keyword, emoji=emoji_unicode))
+
+    @emoji_reaction.command(aliases=strings()['command']['emoji_reaction.remove']['name'],
+                            description=strings()['command']['emoji_reaction.remove']['description'])
+    async def emoji_reaction_remove(self, ctx: Context, emoji_unicode: str, *, keyword: str):
+        if not self.emoji_reaction_manager.is_reaction(emoji_unicode, keyword):
+            await ctx.send(strings()['command']['emoji_reaction.remove']['strings']['no_reaction'].format(
+                keyword=keyword, emoji=emoji_unicode))
+            return
+
+        self.emoji_reaction_manager.remove_reaction(emoji_unicode, keyword)
+        await ctx.send(strings()['command']['emoji_reaction.remove']['strings']['succeed'].format(
+            keyword=keyword, emoji=emoji_unicode, i_ga=i_ga(keyword)))
 
 
 def setup(client: Bot):

@@ -285,6 +285,41 @@
             "down": "내려가는 조건",
             "down_condition": "* 50분마다 3층씩 하강\n* 통화방에서 나갈 때마다 `슈텔로 모든 통화방 사람 수 * 3`만큼 하강"
           }
+        },
+        "emoji_reaction": {
+          "name": [
+            "반응"
+          ],
+          "description": "특정한 키워드에 대한 반응을 설정합니다."
+        },
+        "emoji_reaction.list": {
+          "name": [
+            "목록"
+          ],
+          "description": "반응 목록을 확인합니다.",
+          "strings": {
+            "embed_title": "반응 목록"
+          }
+        },
+        "emoji_reaction.add": {
+          "name": [
+            "추가"
+          ],
+          "description": "반응 목록에 반응을 추가합니다.",
+          "strings": {
+            "duplicated": "이미 있는 반응입니다.",
+            "succeed": "`{keyword} → {emoji}` 반응을 성공적으로 추가했습니다."
+          }
+        },
+        "emoji_reaction.remove": {
+          "name": [
+            "삭제"
+          ],
+          "description": "반응 목록에서 반응을 삭제합니다.",
+          "strings": {
+            "no_reaction": "`{keyword} → {emoji}` 반응이 없습니다.",
+            "succeed": "반응 `{keyword} → {emoji}`{i_ga} 삭제되었습니다."
+          }
         }
       }
     },

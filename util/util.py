@@ -42,5 +42,5 @@ database = connect(
     passwd=environ['MINIC_DATABASE_PASSWD'],
     host='sch.shtelo.org',
     db='shtelo',
-    charset='utf8'
+    charset='utf8mb4'
 )
