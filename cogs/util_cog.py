@@ -173,6 +173,11 @@ class Util(commands.Cog):
             words=words, a_ya=a_ya(words), i_ga=i_ga(words), eun_neun=eun_neun(words), euro=euro(words),
             eul_reul=eul_reul(words)))
 
+    @commands.command(aliases=strings()['command']['cookie']['name'],
+                      description=strings()['command']['cookie']['description'])
+    async def cookie(self, ctx: Context, *string: str):
+        await ctx.send(strings()['command']['cookie']['strings']['template'].format(latency=self.client.latency * 1000))
+
 
 def setup(client: Bot):
     client.add_cog(Util(client))

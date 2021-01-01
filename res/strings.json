@@ -432,6 +432,16 @@
           "strings": {
             "template": "{words}{a_ya}(호격), {words}{i_ga}(주격), {words}{eun_neun}(보조격), {words}{euro}(방향부사격), {words}{eul_reul}(목적격)"
           }
+        },
+        "cookie": {
+          "name": [
+            "핑",
+            "쿠키"
+          ],
+          "description": "핑을 확인합니다.",
+          "strings": {
+            "template": ":cookie: `{latency:.2f}` ms"
+          }
         }
       }
     },
