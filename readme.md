@@ -1,5 +1,6 @@
 # 예정
 * id-member caching
+* add thumbnails to all embeds minic sends
 
 # 이런것도 있으면 좋을 듯
 * 도박
