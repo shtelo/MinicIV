@@ -6,7 +6,6 @@ def a_ya(string: str):
     elif string in '1234567890':
         return '아' if string in '136780' else '야'
     else:
-        # noinspection SpellCheckingInspection
         return '아' if string not in 'aeiouyw' else '야'
 
 
