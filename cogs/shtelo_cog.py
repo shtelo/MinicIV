@@ -5,6 +5,7 @@ from discord import Member, Embed
 from discord.ext import commands
 from discord.ext.commands import Bot, Context
 
+from manager import WeekDay, ShteloTime
 from util import get_strings, get_const
 
 
@@ -29,6 +30,36 @@ class ShteloCog(commands.Cog):
             reactions.append(emojis[i])
         message = await ctx.send(embed=embed)
         await wait([message.add_reaction(reaction) for reaction in reactions])
+
+    @commands.group(aliases=strings()['command']['shtelian_calendar']['name'],
+                    description=strings()['command']['shtelian_calendar']['description'])
+    async def shtelian_calendar(self, ctx: Context, *args):
+        try:
+            await self.to_shtelian_calendar(ctx, *args)
+        except ValueError:
+            await self.from_shtelian_calendar(ctx, args[0], args[1], await WeekDay().convert(ctx, args[2]))
+
+    @shtelian_calendar.command()
+    async def to_shtelian_calendar(self, ctx: Context, year: str, month: str, day: str):
+        year = int(year[:-1] if year.endswith('년') else year)
+        month = int(month[:-1] if month.endswith('월') else month)
+        day = int(day[:-1] if day.endswith('일') else day)
+        if date := ShteloTime.by_datetime(datetime(year, month, day)):
+            await ctx.send(str(date))
+        else:
+            await ctx.send(strings()['command']['shtelian_calendar']['strings']['no_shtelo'])
+
+    @shtelian_calendar.command()
+    async def from_shtelian_calendar(self, ctx: Context, term_number: str, week: str, week_day: WeekDay):
+        term_number = int(term_number[:-1] if term_number.endswith('기') else term_number)
+        week = int(week[:-1] if week.endswith('주') else week)
+        try:
+            date = ShteloTime(term_number, week, week_day).convert()
+        except ValueError:
+            await ctx.send(strings()['command']['shtelian_calendar']['strings']['invalid_date'])
+        else:
+            await ctx.send(strings()['command']['shtelian_calendar']['strings']['date'].format(
+                year=date.year, month=date.month, day=date.day))
 
 
 def setup(client: Bot):

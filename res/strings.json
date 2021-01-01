@@ -470,6 +470,17 @@
             "♒",
             "♓"
           ]
+        },
+        "shtelian_calendar": {
+          "name": [
+            "슈텔력"
+          ],
+          "description": "슈텔력 날짜로 변환합니다.",
+          "strings": {
+            "invalid_date": "올바른 날짜를 입력해주세요.",
+            "no_shtelo": "슈텔로가 존재하지 않았던 시점이에요.",
+            "date": "{year}년 {month}월 {day}일"
+          }
         }
       }
     },

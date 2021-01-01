@@ -1,3 +1,4 @@
+from datetime import datetime
 from json import load
 
 __strings = dict()
@@ -24,6 +25,13 @@ def load_const():
 
 def get_const():
     return __const
+
+
+def get_shtelo_times() -> list:
+    result = []
+    for year, month, day in __const['shtelo_times']:
+        result.append(datetime(year, month, day))
+    return result
 
 
 load_strings()
