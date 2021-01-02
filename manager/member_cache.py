@@ -25,6 +25,9 @@ class MemberCache:
     def __init__(self):
         self.members = dict()
 
+    def get_length(self):
+        return len(self.members)
+
     async def get_member(self, member_id: int, ctx: Optional[Context] = None, refresh: bool = False) -> Member:
         now = datetime.now()
         if refresh or member_id not in self.members or self.members[member_id].last_call < now - timedelta(days=1):

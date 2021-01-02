@@ -30,10 +30,11 @@ class ExtraessentialCog(commands.Cog):
             lambda: f'{AttendanceManager.get_length()}명이 출석',
             lambda: f'{BabelManager.get_leaders_length()}명이 바벨 등반',
             lambda: f'{EmojiReactionManager.get_length()}개의 반응',
-            lambda: f'{MemoManager.get_length()}개의 메모',
+            lambda: f'{MemoManager.get_length()}개 메모',
             lambda: f'{TypingManager.get_leaders_length()}개의 타자연습 기록',
-            lambda: f'{TypingManager.get_sentences_length()}개의 타자연습 문장',
+            lambda: f'{TypingManager.get_sentences_length()}개 문장 타자연습',
             lambda: f'{EconomyManager.get_length()}개의 계좌',
+            lambda: f'{self.member_cache.get_length()}명 기억'
         ]
 
         self.activity_switcher.start()
