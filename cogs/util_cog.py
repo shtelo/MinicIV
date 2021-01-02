@@ -1,13 +1,13 @@
-from asyncio import wait, TimeoutError as AsyncioTimeoutError
+from asyncio import wait, TimeoutError as AsyncioTimeoutError, sleep
 from datetime import datetime
 from typing import Optional
 
-from discord import VoiceChannel, Message
+from discord import VoiceChannel, Message, TextChannel
 from discord.ext import commands
 from discord.ext.commands import Bot, Context, CommandNotFound, CommandError, TextChannelConverter
 
 from cogs.shtelo.bot_protocol import BotProtocol, Request
-from manager import Memo, MemoManager
+from manager import Memo, MemoManager, DatetimeConverter
 from manager.member_cache import MemberCache
 from util import load_strings, get_strings
 from util.postposition import euro, eul_reul, i_ga, a_ya, eun_neun
@@ -43,10 +43,11 @@ class Util(commands.Cog):
     async def on_message(self, message: Message):
         await self.bot_protocol.on_message(message)
 
-        print(get_strings()['message_log_template'].format(
-            datetime=datetime.now(), guild=message.guild, guild_id=message.guild.id,
-            channel=message.channel, channel_id=message.channel.id,
-            author=message.author, author_id=message.author.id, content=message.content))
+        if isinstance(message.channel, TextChannel):
+            print(get_strings()['message_log_template'].format(
+                datetime=datetime.now(), guild=message.guild, guild_id=message.guild.id,
+                channel=message.channel, channel_id=message.channel.id,
+                author=message.author, author_id=message.author.id, content=message.content))
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx: Context, error: CommandError):
@@ -185,6 +186,23 @@ class Util(commands.Cog):
                       description=strings()['command']['cookie']['description'])
     async def cookie(self, ctx: Context, *string: str):
         await ctx.send(strings()['command']['cookie']['strings']['template'].format(latency=self.client.latency * 1000))
+
+    @commands.command(aliases=strings()['command']['notify']['name'],
+                      description=strings()['command']['notify']['description'])
+    async def notify(self, ctx: Context, target: DatetimeConverter, *,
+                     content: str = strings()['command']['notify']['strings']['default_notification']):
+        target: datetime
+        delta = target - datetime.now()
+        delta = delta.days * 86400 + delta.seconds
+        minutes, seconds = delta // 60, delta % 60
+        hours, minutes = minutes // 60, minutes % 60
+        await ctx.send(strings()['command']['notify']['strings']['template'].format(
+            hours=hours, minutes=minutes, seconds=seconds, datetime=target, content=content))
+        message_content = strings()['command']['notify']['strings']['notify'].format(
+            mention=ctx.author.mention, content=content)
+        tasks = (ctx.send(message_content), ctx.author.send(message_content))
+        await sleep(delta)
+        await wait(tasks)
 
 
 def setup(client: Bot):

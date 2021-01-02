@@ -7,3 +7,4 @@ from .updown_game import UpdownGame
 from .memo import Memo, MemoManager
 from .emoji_reaction_manager import EmojiReactionManager
 from .shtelo_time import ShteloTime, WeekDay
+from .datetime_converter import DatetimeConverter

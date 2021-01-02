@@ -36,7 +36,6 @@
         "play": {
           "name": [
             "재생",
-            "예약",
             "추가"
           ],
           "description": "미닉 봇이 노래를 재생하게 합니다. 추가로 YouTube URL을 입력해야 합니다.",
@@ -454,6 +453,19 @@
           "description": "핑을 확인합니다.",
           "strings": {
             "template": ":cookie: `{latency:.2f}` ms"
+          }
+        },
+        "notify": {
+          "name": [
+            "알림",
+            "알리기",
+            "타이머"
+          ],
+          "description": "일정 시간 후에 알람을 줍니다.",
+          "strings": {
+            "default_notification": "알림 내용 없음",
+            "template": "{hours}시간 {minutes}분 {seconds}초 후({datetime})에 알려드릴게요!\n> {content}",
+            "notify": "{mention} 시간이 종료되었습니다!!\n> {content}"
           }
         }
       }
