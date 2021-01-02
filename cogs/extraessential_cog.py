@@ -4,11 +4,11 @@ from datetime import date, timedelta, datetime
 from random import choice, randint
 from typing import Optional
 
-from discord import Message, Member, Embed, VoiceChannel, Guild, CustomActivity
+from discord import Message, Member, Embed, VoiceChannel, Guild, Game
 from discord.ext import commands, tasks
 from discord.ext.commands import Bot, Context, MemberNotFound
 
-from manager import TypingManager, TypingGame, BabelManager, AttendanceManager, Dice, EmojiReactionManager,\
+from manager import TypingManager, TypingGame, BabelManager, AttendanceManager, Dice, EmojiReactionManager, \
     MemoManager, EconomyManager
 from manager.member_cache import MemberCache
 from util import get_keys, get_strings, get_const, i_ga
@@ -49,7 +49,7 @@ class ExtraessentialCog(commands.Cog):
         while self.shtelo_guild is None:
             await sleep(1)
         name = self.activity_names[0]()
-        await self.client.change_presence(activity=CustomActivity(name))
+        await self.client.change_presence(activity=Game(name))
         self.activity_names = self.activity_names[1:] + self.activity_names[:1]
 
     @tasks.loop(seconds=600.0)
