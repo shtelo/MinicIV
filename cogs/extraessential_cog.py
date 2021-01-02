@@ -27,8 +27,8 @@ class ExtraessentialCog(commands.Cog):
         self.emoji_reaction_manager = EmojiReactionManager()
         self.member_cache = MemberCache()
         self.activity_names = [
-            lambda: f'{AttendanceManager.get_length()}명 출석중',
-            lambda: f'{BabelManager.get_leaders_length()}명 바벨 등반중',
+            lambda: f'{AttendanceManager.get_length()}명이 출석',
+            lambda: f'{BabelManager.get_leaders_length()}명이 바벨 등반',
             lambda: f'{EmojiReactionManager.get_length()}개의 반응',
             lambda: f'{MemoManager.get_length()}개의 메모',
             lambda: f'{TypingManager.get_leaders_length()}개의 타자연습 기록',
