@@ -1,5 +1,6 @@
 from asyncio import wait, TimeoutError as AsyncioTimeoutError
 from datetime import datetime
+from typing import Optional
 
 from discord import VoiceChannel, Message
 from discord.ext import commands
@@ -87,7 +88,10 @@ class Util(commands.Cog):
     @commands.group(aliases=strings()['command']['memo']['name'],
                     description=strings()['command']['memo']['description'],
                     invoke_without_command=True)
-    async def memo(self, ctx: Context, key: str):
+    async def memo(self, ctx: Context, key: Optional[str] = None):
+        if key is None:
+            await self.memo_list(ctx)
+            return
         if MemoManager.is_key(key):
             await ctx.send(strings()['command']['memo']['strings']['template']
                            .format(data=MemoManager.get_value(key).replace('\n', '\n> ')))
