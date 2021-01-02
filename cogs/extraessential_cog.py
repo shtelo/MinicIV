@@ -4,11 +4,12 @@ from datetime import date, timedelta, datetime
 from random import choice, randint
 from typing import Optional
 
-from discord import Message, Member, Embed, VoiceChannel, Guild
+from discord import Message, Member, Embed, VoiceChannel, Guild, CustomActivity
 from discord.ext import commands, tasks
 from discord.ext.commands import Bot, Context, MemberNotFound
 
-from manager import TypingManager, TypingGame, BabelManager, AttendanceManager, Dice, EmojiReactionManager
+from manager import TypingManager, TypingGame, BabelManager, AttendanceManager, Dice, EmojiReactionManager,\
+    MemoManager, EconomyManager
 from manager.member_cache import MemberCache
 from util import get_keys, get_strings, get_const, i_ga
 
@@ -25,13 +26,31 @@ class ExtraessentialCog(commands.Cog):
         self.shtelo_guild: Optional[Guild] = None
         self.emoji_reaction_manager = EmojiReactionManager()
         self.member_cache = MemberCache()
+        self.activity_names = [
+            lambda: f'{AttendanceManager.get_length()}명 출석중',
+            lambda: f'{BabelManager.get_leaders_length()}명 바벨 등반중',
+            lambda: f'{EmojiReactionManager.get_length()}개의 반응',
+            lambda: f'{MemoManager.get_length()}개의 메모',
+            lambda: f'{TypingManager.get_leaders_length()}개의 타자연습 기록',
+            lambda: f'{TypingManager.get_sentences_length()}개의 타자연습 문장',
+            lambda: f'{EconomyManager.get_length()}개의 계좌',
+        ]
 
+        self.activity_switcher.start()
         self.babel_upper.start()
         self.babel_gravity.start()
 
     def cog_unload(self):
         self.babel_upper.cancel()
         self.babel_gravity.cancel()
+
+    @tasks.loop(seconds=30.0)
+    async def activity_switcher(self):
+        while self.shtelo_guild is None:
+            await sleep(1)
+        name = self.activity_names[0]()
+        await self.client.change_presence(activity=CustomActivity(name))
+        self.activity_names = self.activity_names[1:] + self.activity_names[:1]
 
     @tasks.loop(seconds=600.0)
     async def babel_upper(self):

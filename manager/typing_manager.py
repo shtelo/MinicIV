@@ -80,6 +80,18 @@ class TypingManager:
                 return dict()
 
     @staticmethod
+    def get_leaders_length() -> int:
+        with database.cursor() as cursor:
+            cursor.execute('SELECT COUNT(*) FROM typing_record;')
+            return cursor.fetchall()[0][0]
+
+    @staticmethod
+    def get_sentences_length() -> int:
+        with database.cursor() as cursor:
+            cursor.execute('SELECT COUNT(*) FROM typing_sentence;')
+            return cursor.fetchall()[0][0]
+
+    @staticmethod
     def acheatablify(sentence: str) -> str:
         """복붙을 통한 통과를 방지하기 위해 문장을 불가편법화(acheatablify)합니다."""
         return chr(8203).join(list(sentence))

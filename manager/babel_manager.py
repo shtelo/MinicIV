@@ -20,6 +20,12 @@ class BabelManager:
                 return dict()
 
     @staticmethod
+    def get_leaders_length() -> int:
+        with database.cursor() as cursor:
+            cursor.execute('SELECT COUNT(*) FROM babel WHERE floor > 1')
+            return cursor.fetchall()[0][0]
+
+    @staticmethod
     def up(member_id: int, delta: int):
         with database.cursor(DictCursor) as cursor:
             if leader := BabelManager.get_leader(member_id):

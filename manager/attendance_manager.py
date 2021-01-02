@@ -16,6 +16,12 @@ class AttendanceManager:
                 return dict()
 
     @staticmethod
+    def get_length() -> int:
+        with database.cursor() as cursor:
+            cursor.execute('SELECT COUNT(*) FROM attendance;')
+            return cursor.fetchall()[0][0]
+
+    @staticmethod
     def attend(member_id: int) -> int:
         """
         member_id 로 출석합니다.

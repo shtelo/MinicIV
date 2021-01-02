@@ -13,9 +13,15 @@ class MemoManager:
     @staticmethod
     def get(key: str) -> Memo:
         with database.cursor(DictCursor) as cursor:
-            cursor.execute(f'SELECT * FROM memos WHERE `key` = %s;', key)
+            cursor.execute('SELECT * FROM memos WHERE `key` = %s;', key)
             result = cursor.fetchall()[0]
             return Memo(result['value'], result['author_id'])
+
+    @staticmethod
+    def get_length() -> int:
+        with database.cursor() as cursor:
+            cursor.execute('SELECT COUNT(*) FROM memos;')
+            return cursor.fetchall()[0][0]
 
     @staticmethod
     def get_value(key: str) -> str:

@@ -8,6 +8,12 @@ class EmojiReactionManager:
             cursor.execute('SELECT * FROM emoji_reaction WHERE emoji = %s AND keyword = %s', (emoji, keyword))
             return bool(cursor.fetchall())
 
+    @staticmethod
+    def get_length() -> int:
+        with database.cursor() as cursor:
+            cursor.execute('SELECT COUNT(*) FROM emoji_reaction;')
+            return cursor.fetchall()[0][0]
+
     def __init__(self):
         self.reactions = dict()
         self.refresh_reactions()

@@ -14,6 +14,12 @@ class EconomyManager:
                 return dict()
 
     @staticmethod
+    def get_length() -> int:
+        with database.cursor() as cursor:
+            cursor.execute('SELECT COUNT(*) FROM wallet;')
+            return cursor.fetchall()[0][0]
+
+    @staticmethod
     def new_account(member_id: int, *, force: bool = True) -> dict:
         if force or not EconomyManager.get_account(member_id):
             with database.cursor() as cursor:
