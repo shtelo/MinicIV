@@ -11,7 +11,8 @@ from discord.ext.commands import Bot, Context, MemberNotFound
 from manager import TypingManager, TypingGame, BabelManager, AttendanceManager, Dice, EmojiReactionManager, \
     MemoManager, EconomyManager
 from manager.member_cache import MemberCache
-from util import get_keys, get_strings, get_const, i_ga
+from util import get_keys, get_strings, get_const
+from util.postposition import i_ga
 
 
 def strings():

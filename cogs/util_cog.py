@@ -9,7 +9,8 @@ from discord.ext.commands import Bot, Context, CommandNotFound, CommandError, Te
 from cogs.shtelo.bot_protocol import BotProtocol, Request
 from manager import Memo, MemoManager
 from manager.member_cache import MemberCache
-from util import eul_reul, euro, i_ga, load_strings, get_strings, eun_neun, a_ya
+from util import load_strings, get_strings
+from util.postposition import euro, eul_reul, i_ga, a_ya, eun_neun
 
 
 def strings():
@@ -179,6 +180,7 @@ class Util(commands.Cog):
             words=words, a_ya=a_ya(words), i_ga=i_ga(words), eun_neun=eun_neun(words), euro=euro(words),
             eul_reul=eul_reul(words)))
 
+    # noinspection PyUnusedLocal
     @commands.command(aliases=strings()['command']['cookie']['name'],
                       description=strings()['command']['cookie']['description'])
     async def cookie(self, ctx: Context, *string: str):

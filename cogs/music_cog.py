@@ -11,7 +11,8 @@ from discord.utils import get
 from pytube import YouTube
 from youtube_dl import YoutubeDL
 
-from util import eul_reul, get_strings
+from util import get_strings
+from util.postposition import eul_reul
 
 
 def strings():
