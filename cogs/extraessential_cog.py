@@ -291,7 +291,8 @@ class ExtraessentialCog(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.group(aliases=strings()['command']['babel']['name'],
-                    description=strings()['command']['babel']['description'])
+                    description=strings()['command']['babel']['description'],
+                    invoke_without_command=True)
     async def babel(self, ctx: Context):
         leaderboard = BabelManager.get_leaderboard()
         if leaderboard:
