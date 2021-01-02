@@ -33,7 +33,7 @@ class ExtraessentialCog(commands.Cog):
             lambda: f'{MemoManager.get_length()}개 메모',
             lambda: f'{TypingManager.get_leaders_length()}개의 타자연습 기록',
             lambda: f'{TypingManager.get_sentences_length()}개 문장 타자연습',
-            lambda: f'{EconomyManager.get_length()}개의 계좌',
+            lambda: f'{EconomyManager.get_length()}개 계좌 관리',
             lambda: f'{self.member_cache.get_length()}명 기억'
         ]
 
