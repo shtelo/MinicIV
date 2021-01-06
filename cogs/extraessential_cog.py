@@ -1,7 +1,6 @@
 import re
 from asyncio import TimeoutError as AsyncioTimeoutError, wait, sleep
 from datetime import date, timedelta, datetime
-from difflib import ndiff
 from random import choice, randint
 from typing import Optional
 
@@ -176,23 +175,11 @@ class ExtraessentialCog(commands.Cog):
                 if message.content == game.sentence:
                     break
                 else:
-                    diff = ndiff(message.content, game.sentence)
-                    content = ''
-                    zero_width_space = chr(8203)
-                    for d in diff:
-                        state, letter = d[0], d[2]
-                        if d[0] == '+':
-                            content += f'**{letter + zero_width_space}**'
-                        elif d[0] == '-':
-                            content += f'~~_{letter + zero_width_space}_~~'
-                        else:
-                            content += letter + zero_width_space
-                    content = content.replace('~~~~', '').replace('__', '').replace('****', '')
                     await wait((
                         game.channel.send(strings()['command']['typing']['strings']['correcting'].format(
-                            mention=message.author.mention, content=content)),
-                        game.message.delete()
-                    ))
+                            mention=message.author.mention,
+                            diff=TypingManager.get_diff(message.content, game.sentence))),
+                        game.message.delete()))
 
         seconds, speed = game.calculate(datetime.now())
         await ctx.send(strings()['command']['typing']['strings']['succeed'].format(

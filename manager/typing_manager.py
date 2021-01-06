@@ -66,16 +66,18 @@ class TypingManager:
             result[i] = list(result[i])
             if result[i][0] == '?':
                 for j in range(2, len(result[i])):
-                    print(result[i][j], end='')
-                    if east_asian_width(result[i-1][j]) in 'FW':
-                        if result[i][j] == '+':
-                            result[i][j] = '＋'
-                        elif result[i][j] == '-':
-                            result[i][j] = '－'
-                        elif result[i][j] == ' ':
-                            result[i][j] = '　'
-                        elif result[i][j] == '^':
-                            result[i][j] = '＾'
+                    try:
+                        if east_asian_width(result[i-1][j]) in 'FW':
+                            if result[i][j] == '+':
+                                result[i][j] = '＋'
+                            elif result[i][j] == '-':
+                                result[i][j] = '－'
+                            elif result[i][j] == ' ':
+                                result[i][j] = '　'
+                            elif result[i][j] == '^':
+                                result[i][j] = '＾'
+                    except IndexError:
+                        break
             result[i] = ''.join(result[i])
         return '\n'.join(result)
 
