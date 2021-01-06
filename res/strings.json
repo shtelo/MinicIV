@@ -272,7 +272,7 @@
           "description": "출석 리더보드를 확인합니다.",
           "strings": {
             "embed_title": "출석 리더보드",
-            "template": "{place}. **{member}** {strike}일 {did_today}"
+            "template": "{place}등 **{member}** {strike}일 {emoji}"
           }
         },
         "babel": {

@@ -302,11 +302,22 @@ class ExtraessentialCog(commands.Cog):
                         description=strings()['command']['attendance.leaderboard']['description'])
     async def attendance_leaderboard(self, ctx: Context):
         description = []
+        today = date.today()
+        previous_strike = -1
+        offset = 0
         for i, leader in enumerate(AttendanceManager.get_leaderboard()):
             member_id, strike, date_ = leader
+            if previous_strike == strike:
+                offset += 1
+            else:
+                offset = 0
+            emoji = ':fire:' if date_ == today \
+                else ':exclamation:' if date_ >= today - timedelta(days=1) \
+                else ''
             description.append(strings()['command']['attendance.leaderboard']['strings']['template'].format(
-                place=i + 1, member=(await self.member_cache.get_member(member_id, ctx)).display_name, strike=strike,
-                did_today=':fire:' if date_ == date.today() else ''))
+                place=i + 1 - offset, member=(await self.member_cache.get_member(member_id, ctx)).display_name,
+                strike=strike, emoji=emoji))
+            previous_strike = strike
         embed = Embed(title=strings()['command']['attendance.leaderboard']['strings']['embed_title'],
                       description='\n'.join(description), colour=get_const()['color']['sch_vanilla'])
         await ctx.send(embed=embed)
