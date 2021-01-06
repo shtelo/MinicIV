@@ -140,4 +140,3 @@ cython_debug/
 # IntelliJ Project
 .idea/
 songs/*
-scratchpad/
