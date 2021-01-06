@@ -1,6 +1,8 @@
 from datetime import datetime
+from difflib import ndiff
 from random import choice
 from typing import Optional
+from unicodedata import east_asian_width
 
 from discord import TextChannel, Message
 from pymysql.cursors import DictCursor
@@ -56,6 +58,26 @@ class TypingManager:
 
     def __init__(self):
         self.games = dict()
+
+    @staticmethod
+    def get_diff(before: str, after: str) -> str:
+        result = list(ndiff([before], [after]))
+        for i in range(len(result)):
+            result[i] = list(result[i])
+            if result[i][0] == '?':
+                for j in range(2, len(result[i])):
+                    print(result[i][j], end='')
+                    if east_asian_width(result[i-1][j]) in 'FW':
+                        if result[i][j] == '+':
+                            result[i][j] = '＋'
+                        elif result[i][j] == '-':
+                            result[i][j] = '－'
+                        elif result[i][j] == ' ':
+                            result[i][j] = '　'
+                        elif result[i][j] == '^':
+                            result[i][j] = '＾'
+            result[i] = ''.join(result[i])
+        return '\n'.join(result)
 
     @staticmethod
     def get_sentences(language: int = 0) -> tuple:

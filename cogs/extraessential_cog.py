@@ -243,8 +243,7 @@ class ExtraessentialCog(commands.Cog):
             return
 
         message = await ctx.send(strings()['command']['typing.edit']['strings']['wanna_change'].format(
-            id=sentence_id, before=db_sentence['content'], after=sentence
-        ))
+            id=sentence_id, diff=TypingManager.get_diff(db_sentence['content'], sentence)))
         await wait((message.add_reaction(get_strings()['emoji']['o']),
                     message.add_reaction(get_strings()['emoji']['x'])))
 

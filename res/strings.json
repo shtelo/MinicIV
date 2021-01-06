@@ -206,7 +206,7 @@
           "description": "타자연습 문장을 수정합니다.",
           "strings": {
             "no_sentence": "ID가 `{id}`인 문장이 없습니다.",
-            "wanna_change": "`{id}`번 문장을 고치시겠습니까?\n> 바뀌기 전  `{before}`\n> 바뀐 후  `{after}`",
+            "wanna_change": "`{id}`번 문장을 고치시겠습니까?\n```diff\n{diff}\n```",
             "timeout": "시간이 초과되었습니다.",
             "cancelled": "취소되었습니다.",
             "succeed": "문장이 수정되었습니다."
