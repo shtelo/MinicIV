@@ -110,7 +110,7 @@ class ExtraessentialCog(commands.Cog):
 
     @commands.command(aliases=strings()['command']['dice']['name'],
                       description=strings()['command']['dice']['description'])
-    async def dice(self, ctx: Context, dice: Dice):
+    async def dice(self, ctx: Context, dice: Dice = Dice().set_dice(Dice.D6).set_count(1)):
         if dice is None:
             await ctx.send(strings()['command']['dice']['strings']['no_dice'])
             return
