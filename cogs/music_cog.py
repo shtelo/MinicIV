@@ -1,3 +1,4 @@
+import re
 from asyncio import get_event_loop, sleep
 from os import mkdir
 from os.path import isfile, isdir
@@ -154,6 +155,9 @@ class Music(commands.Cog):
                       description=strings()['command']['play']['description'])
     async def play(self, ctx, url: str):
         """커맨드가 사용된 서버에 연결되어있는 채널에서 입력받은 YouTube URL의 영상의 오디오를 재생합니다."""
+
+        if not re.compile(r'\.+(youtube|youtu\.be)\.+/\.+').fullmatch(url):
+            url = f'https://www.youtube.com/watch?v={url}'
 
         voice = get(self.client.voice_clients, guild=ctx.guild)
 
