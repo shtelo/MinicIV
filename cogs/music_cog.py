@@ -220,6 +220,13 @@ class Music(commands.Cog):
             else:
                 await ctx.send(strings()['command']['dequeue']['strings']['deleted'].format(filename=video_id))
 
+    @commands.command(aliases=strings()['command']['dequeue_all']['name'],
+                      description=strings()['command']['dequeue_all']['description'])
+    async def dequeue_all(self, ctx: Context):
+        if ctx.guild.id in self.queues:
+            self.queues[ctx.guild.id] = self.queues[ctx.guild.id][:1]
+            await ctx.send(strings()['command']['dequeue_all']['strings']['succeed'])
+
     @commands.command(aliases=strings()['command']['show_queue']['name'],
                       description=strings()['command']['show_queue']['description'])
     async def show_queue(self, ctx):
