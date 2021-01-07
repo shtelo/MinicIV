@@ -63,10 +63,10 @@ class ExtraessentialCog(commands.Cog):
             for member_id in member_ids:
                 BabelManager.up(member_id, len(member_ids))
 
-    @tasks.loop(seconds=3000.0)
+    @tasks.loop(seconds=1200.0)
     async def babel_gravity(self):
         for leader in BabelManager.get_leaderboard():
-            BabelManager.up(leader['member_id'], -3)
+            BabelManager.up(leader['member_id'], -5)
 
     @commands.Cog.listener()
     async def on_ready(self):
