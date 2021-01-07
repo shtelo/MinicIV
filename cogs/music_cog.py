@@ -9,9 +9,9 @@ from discord import FFmpegPCMAudio, PCMVolumeTransformer
 from discord.ext import commands
 from discord.ext.commands import Bot, Context
 from discord.utils import get
-from pytube import YouTube
 from youtube_dl import YoutubeDL
 
+from manager import MusicCache
 from util import get_strings
 from util.postposition import eul_reul
 
@@ -74,6 +74,7 @@ class Music(commands.Cog):
         self.client = client
         self.volume = 0.02
         self.queues = {}
+        self.music_cache = MusicCache()
 
     def add_to_queue(self, guild_id: int, filename: str):
         self.queues[guild_id].append(filename)
@@ -237,7 +238,8 @@ class Music(commands.Cog):
             for i in range(count):
                 await sleep(0)
                 filename = self.queues[ctx.guild.id][i]
-                line = f"\n> `{i}.` {YouTube(f'https://youtu.be/{filename}').title}(`{filename}`)"
+                title = self.music_cache.get_title(filename)
+                line = f"\n> `{i}.` {title} (`{filename}`)"
                 if len(result) + len(line) > 2000:
                     break
                 result += line
