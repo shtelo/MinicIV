@@ -157,9 +157,11 @@ class Music(commands.Cog):
     async def play(self, ctx, *urls: str):
         """커맨드가 사용된 서버에 연결되어있는 채널에서 입력받은 YouTube URL의 영상의 오디오를 재생합니다."""
 
-        for url in urls:
-            await sleep(0)
-            if not re.compile(r'\.+(youtube|youtu\.be)\.+/\.+').fullmatch(url):
+        message = None
+        urls_count = len(urls)
+        for i, url in enumerate(urls):
+            await sleep(1)
+            if not re.compile(r'.+(youtube|youtu\.be).+/.+').match(url):
                 url = f'https://www.youtube.com/watch?v={url}'
 
             voice = get(self.client.voice_clients, guild=ctx.guild)
@@ -171,11 +173,13 @@ class Music(commands.Cog):
 
             video_id = get_video_id(url)
 
-            message = None
-
             if not isfile(f'songs/{video_id}.mp3'):
-                message = await ctx.send(strings()['command']['play']['strings']['downloading']
-                                         .format(url=url, eul_reul=eul_reul(url)))
+                content = strings()['command']['play']['strings']['downloading']\
+                    .format(url=url, eul_reul=eul_reul(url), now=i + 1, count=urls_count)
+                if message:
+                    await message.edit(content=content)
+                else:
+                    message = await ctx.send(content)
                 thread = Thread(target=Music.download_music, args=(url, video_id))
                 thread.setDaemon(False)
                 thread.start()
@@ -185,19 +189,19 @@ class Music(commands.Cog):
             self.add_to_queue(ctx.guild.id, video_id)
             if not (voice and voice.is_playing()):
                 await self.play_next(ctx.guild.id, voice, get_event_loop())
+                content = strings()['command']['play']['strings']['playing']\
+                    .format(url=url, eul_reul=eul_reul(url), now=i + 1, count=urls_count)
                 if message:
-                    await message.edit(content=strings()['command']['play']['strings']['playing']
-                                       .format(url=url, eul_reul=eul_reul(url)))
+                    await message.edit(content=content)
                 else:
-                    await ctx.send(strings()['command']['play']['strings']['playing']
-                                   .format(url=url, eul_reul=eul_reul(url)))
+                    message = await ctx.send(content)
             else:
+                content = strings()['command']['play']['strings']['queued']\
+                    .format(url=url, eul_reul=eul_reul(url), now=i + 1, count=urls_count)
                 if message:
-                    await message.edit(content=strings()['command']['play']['strings']['queued']
-                                       .format(url=url, eul_reul=eul_reul(url)))
+                    await message.edit(content=content)
                 else:
-                    await ctx.send(strings()['command']['play']['strings']['queued']
-                                   .format(url=url, eul_reul=eul_reul(url)))
+                    message = await ctx.send(content)
 
     @commands.command(aliases=strings()['command']['dequeue']['name'],
                       description=strings()['command']['dequeue']['description'])
@@ -219,11 +223,12 @@ class Music(commands.Cog):
     @commands.command(aliases=strings()['command']['show_queue']['name'],
                       description=strings()['command']['show_queue']['description'])
     async def show_queue(self, ctx):
-        if ctx.guild.id in self.queues.keys():
+        if ctx.guild.id in self.queues:
             message = await ctx.send(strings()['command']['show_queue']['strings']['loading'])
             count = len(self.queues[ctx.guild.id])
             result = f"{strings()['command']['show_queue']['strings']['there_are'].format(count=count)}"
             for i in range(count):
+                await sleep(0)
                 filename = self.queues[ctx.guild.id][i]
                 line = f"\n> `{i}.` {YouTube(f'https://youtu.be/{filename}').title}(`{filename}`)"
                 if len(result) + len(line) > 2000:

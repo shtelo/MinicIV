@@ -40,14 +40,15 @@
           ],
           "description": "미닉 봇이 노래를 재생하게 합니다. 추가로 YouTube URL을 입력해야 합니다.",
           "strings": {
-            "downloading": "`{url}`{eul_reul} 다운로드하는 중입니다…",
-            "playing": "`{url}`{eul_reul} 재생합니다.",
-            "queued": "`{url}`{eul_reul} 대기열에 추가했습니다."
+            "downloading": "`{url}`{eul_reul} 다운로드하는 중입니다… (`{now}/{count}`)",
+            "playing": "`{url}`{eul_reul} 재생합니다. (`{now}/{count}`)",
+            "queued": "`{url}`{eul_reul} 대기열에 추가했습니다. (`{now}/{count}`)"
           }
         },
         "dequeue": {
           "name": [
-            "삭제"
+            "삭제",
+            "디큐"
           ],
           "description": "대기열에서 음악을 삭제합니다.",
           "strings": {
