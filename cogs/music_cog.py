@@ -153,48 +153,50 @@ class Music(commands.Cog):
 
     @commands.command(aliases=strings()['command']['play']['name'],
                       description=strings()['command']['play']['description'])
-    async def play(self, ctx, url: str):
+    async def play(self, ctx, *urls: str):
         """커맨드가 사용된 서버에 연결되어있는 채널에서 입력받은 YouTube URL의 영상의 오디오를 재생합니다."""
 
-        if not re.compile(r'\.+(youtube|youtu\.be)\.+/\.+').fullmatch(url):
-            url = f'https://www.youtube.com/watch?v={url}'
+        for url in urls:
+            await sleep(0)
+            if not re.compile(r'\.+(youtube|youtu\.be)\.+/\.+').fullmatch(url):
+                url = f'https://www.youtube.com/watch?v={url}'
 
-        voice = get(self.client.voice_clients, guild=ctx.guild)
-
-        if not voice or not voice.is_connected():
-            if await self._join(ctx):
-                return
             voice = get(self.client.voice_clients, guild=ctx.guild)
 
-        video_id = get_video_id(url)
+            if not voice or not voice.is_connected():
+                if await self._join(ctx):
+                    return
+                voice = get(self.client.voice_clients, guild=ctx.guild)
 
-        message = None
+            video_id = get_video_id(url)
 
-        if not isfile(f'songs/{video_id}.mp3'):
-            message = await ctx.send(strings()['command']['play']['strings']['downloading']
-                                     .format(url=url, eul_reul=eul_reul(url)))
-            thread = Thread(target=Music.download_music, args=(url, video_id))
-            thread.setDaemon(False)
-            thread.start()
+            message = None
 
-        await Music.wait_for(url)
+            if not isfile(f'songs/{video_id}.mp3'):
+                message = await ctx.send(strings()['command']['play']['strings']['downloading']
+                                         .format(url=url, eul_reul=eul_reul(url)))
+                thread = Thread(target=Music.download_music, args=(url, video_id))
+                thread.setDaemon(False)
+                thread.start()
 
-        self.add_to_queue(ctx.guild.id, video_id)
-        if not (voice and voice.is_playing()):
-            await self.play_next(ctx.guild.id, voice, get_event_loop())
-            if message:
-                await message.edit(content=strings()['command']['play']['strings']['playing']
+            await Music.wait_for(url)
+
+            self.add_to_queue(ctx.guild.id, video_id)
+            if not (voice and voice.is_playing()):
+                await self.play_next(ctx.guild.id, voice, get_event_loop())
+                if message:
+                    await message.edit(content=strings()['command']['play']['strings']['playing']
+                                       .format(url=url, eul_reul=eul_reul(url)))
+                else:
+                    await ctx.send(strings()['command']['play']['strings']['playing']
                                    .format(url=url, eul_reul=eul_reul(url)))
             else:
-                await ctx.send(strings()['command']['play']['strings']['playing']
-                               .format(url=url, eul_reul=eul_reul(url)))
-        else:
-            if message:
-                await message.edit(content=strings()['command']['play']['strings']['queued']
+                if message:
+                    await message.edit(content=strings()['command']['play']['strings']['queued']
+                                       .format(url=url, eul_reul=eul_reul(url)))
+                else:
+                    await ctx.send(strings()['command']['play']['strings']['queued']
                                    .format(url=url, eul_reul=eul_reul(url)))
-            else:
-                await ctx.send(strings()['command']['play']['strings']['queued']
-                               .format(url=url, eul_reul=eul_reul(url)))
 
     @commands.command(aliases=strings()['command']['dequeue']['name'],
                       description=strings()['command']['dequeue']['description'])
