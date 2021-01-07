@@ -49,6 +49,7 @@ class Music(commands.Cog):
 
         # noinspection SpellCheckingInspection
         cls.download_queue.append(url)
+        # noinspection SpellCheckingInspection
         with YoutubeDL({
             'format': 'bestaudio/best',
             'outtmpl': f'./songs/{filename}.%(ext)s',
