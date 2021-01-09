@@ -9,7 +9,7 @@ from discord.ext import commands, tasks
 from discord.ext.commands import Bot, Context, MemberNotFound
 
 from manager import TypingManager, TypingGame, BabelManager, AttendanceManager, Dice, EmojiReactionManager, \
-    MemoManager, EconomyManager
+    MemoManager, EconomyManager, MusicCache
 from manager.member_cache import MemberCache
 from util import get_keys, get_strings, get_const
 from util.postposition import i_ga
@@ -27,6 +27,7 @@ class ExtraessentialCog(commands.Cog):
         self.shtelo_guild: Optional[Guild] = None
         self.emoji_reaction_manager = EmojiReactionManager()
         self.member_cache = MemberCache()
+        self.music_cache = MusicCache()
         self.activity_names = [
             lambda: f'{AttendanceManager.get_length()}명이 출석',
             lambda: f'{BabelManager.get_leaders_length()}명이 바벨 등반',
@@ -35,7 +36,8 @@ class ExtraessentialCog(commands.Cog):
             lambda: f'{TypingManager.get_leaders_length()}개의 타자연습 기록',
             lambda: f'{TypingManager.get_sentences_length()}개 문장 타자연습',
             lambda: f'{EconomyManager.get_length()}개 계좌 관리',
-            lambda: f'{self.member_cache.get_length()}명 기억'
+            lambda: f'{self.member_cache.get_length()}명 기억',
+            lambda: f'{self.music_cache.get_length()}개 노래 기억'
         ]
 
         self.activity_switcher.start()
