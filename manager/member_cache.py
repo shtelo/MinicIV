@@ -25,6 +25,12 @@ class MemberCache:
     def __init__(self):
         self.members = dict()
 
+    def optimize_cache(self):
+        now = datetime.now()
+        for member_id in self.members.keys():
+            if self.members[member_id].last_call < now - timedelta(days=1):
+                del self.members[member_id]
+
     def get_length(self):
         return len(self.members)
 

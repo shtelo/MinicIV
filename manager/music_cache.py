@@ -32,6 +32,12 @@ class MusicCache:
     def __init__(self):
         self.musics = dict()
 
+    def optimize_cache(self):
+        now = datetime.now()
+        for music_key in self.musics.keys():
+            if self.musics[music_key].last_call < now - timedelta(hours=12):
+                del self.musics[music_key]
+
     def get_length(self):
         return len(self.members)
 

@@ -3,11 +3,11 @@ from datetime import datetime
 from typing import Optional
 
 from discord import VoiceChannel, Message, TextChannel
-from discord.ext import commands
+from discord.ext import commands, tasks
 from discord.ext.commands import Bot, Context, CommandNotFound, CommandError, TextChannelConverter
 
 from cogs.shtelo.bot_protocol import BotProtocol, Request
-from manager import Memo, MemoManager, DatetimeConverter
+from manager import Memo, MemoManager, DatetimeConverter, MusicCache
 from manager.member_cache import MemberCache
 from util import load_strings, get_strings
 from util.postposition import euro, eul_reul, i_ga, a_ya, eun_neun
@@ -38,6 +38,12 @@ class Util(commands.Cog):
         self.client = client
         self.bot_protocol = MinicProtocol(self.client)
         self.member_cache = MemberCache()
+        self.music_cache = MusicCache()
+
+    @tasks.loop(seconds=1800.0)
+    async def optimize_cache(self):
+        self.member_cache.optimize_cache()
+        self.music_cache.optimize_cache()
 
     @commands.Cog.listener()
     async def on_message(self, message: Message):
