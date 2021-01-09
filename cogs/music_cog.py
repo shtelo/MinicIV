@@ -1,5 +1,6 @@
 import re
 from asyncio import get_event_loop, sleep
+from datetime import datetime
 from os import mkdir
 from os.path import isfile, isdir
 from threading import Thread
@@ -302,6 +303,19 @@ class Music(commands.Cog):
                 await ctx.send(strings()['command']['volume']['strings']['set'].format(volume=volume))
             else:
                 await ctx.send(strings()['command']['volume']['strings']['not_playing'])
+
+    @commands.command(aliases=strings()['command']['now_playing']['name'],
+                      description=strings()['command']['now_playing']['description'])
+    async def now_playing(self, ctx: Context):
+        voice = get(self.client.voice_clients, guild=ctx.guild)
+
+        if voice and voice.is_playing():
+            video_id = self.queues[ctx.guild.id][-1]
+            title = self.music_cache.get_title(video_id)
+            await ctx.send(strings()['command']['now_playing']['strings']['template'].format(
+                datetime=datetime.now(), title=title, url=f'http://youtu.be/{video_id}'))
+        else:
+            await ctx.send(strings()['command']['now_playing']['strings']['not_playing'])
 
 
 def setup(client):

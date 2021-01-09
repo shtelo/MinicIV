@@ -120,6 +120,21 @@
             "set": "볼륨을 {volume}%로 설정했습니다.",
             "not_playing": "볼륨을 조절할 음악이 없습니다."
           }
+        },
+        "now_playing": {
+          "name": [
+            "재생중",
+            "지금이노래",
+            "지금",
+            "이노래",
+            "현재곡",
+            "제목"
+          ],
+          "description": "현재 곡 제목을 확인합니다.",
+          "strings": {
+            "not_playing": "재생중인 음악이 없습니다.",
+            "template": "현재 재생중: {datetime}\n> {title}\n> <{url}>"
+          }
         }
       }
     },
