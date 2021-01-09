@@ -310,7 +310,7 @@ class Music(commands.Cog):
         voice = get(self.client.voice_clients, guild=ctx.guild)
 
         if voice and voice.is_playing():
-            video_id = self.queues[ctx.guild.id][-1]
+            video_id = self.queues[ctx.guild.id][0]
             title = self.music_cache.get_title(video_id)
             await ctx.send(strings()['command']['now_playing']['strings']['template'].format(
                 datetime=datetime.now(), title=title, url=f'http://youtu.be/{video_id}'))
