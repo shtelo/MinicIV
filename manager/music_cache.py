@@ -37,7 +37,7 @@ class MusicCache:
 
     def get_music_data(self, video_id: str, refresh: bool = False) -> MusicData:
         now = datetime.now()
-        if refresh or video_id not in self.musics or self.musics[video_id].last_call < now - timedelta(hours=4):
+        if refresh or video_id not in self.musics or self.musics[video_id].last_call < now - timedelta(hours=12):
             self.musics[video_id] = MusicData(video_id, YouTube(f'https://youtu.be/{video_id}').title, now)
         return self.musics[video_id]
 
