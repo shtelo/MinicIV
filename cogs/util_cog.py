@@ -66,10 +66,10 @@ class Util(commands.Cog):
     @commands.command(aliases=strings()['command']['move']['name'],
                       description=strings()['command']['move']['description'])
     async def move(self, ctx: Context, from_channel: VoiceChannel, to_channel: VoiceChannel):
-        tasks = []
+        tasks_ = []
         for member_id in from_channel.voice_states.keys():
-            tasks.append((await self.member_cache.get_member(member_id, ctx)).edit(voice_channel=to_channel))
-        await wait(tasks)
+            tasks_.append((await self.member_cache.get_member(member_id, ctx)).edit(voice_channel=to_channel))
+        await wait(tasks_)
 
     @commands.command(aliases=strings()['command']['gather']['name'],
                       description=strings()['command']['gather']['description'])
@@ -85,13 +85,13 @@ class Util(commands.Cog):
                 await ctx.send(strings()['command']['gather']['strings']['invalid_id'])
                 return
 
-        tasks = []
+        tasks_ = []
         for voice_channel in ctx.guild.voice_channels:
             if voice_channel.id not in (ctx.guild.afk_channel.id, destination_channel.id):
                 for member in voice_channel.members:
-                    tasks.append(member.edit(voice_channel=destination_channel))
+                    tasks_.append(member.edit(voice_channel=destination_channel))
 
-        await wait(tasks)
+        await wait(tasks_)
 
     @commands.group(aliases=strings()['command']['memo']['name'],
                     description=strings()['command']['memo']['description'],
@@ -206,9 +206,9 @@ class Util(commands.Cog):
             hours=hours, minutes=minutes, seconds=seconds, datetime=target, content=content))
         message_content = strings()['command']['notify']['strings']['notify'].format(
             mention=ctx.author.mention, content=content)
-        tasks = (ctx.send(message_content), ctx.author.send(message_content))
+        tasks_ = (ctx.send(message_content), ctx.author.send(message_content))
         await sleep(delta)
-        await wait(tasks)
+        await wait(tasks_)
 
 
 def setup(client: Bot):

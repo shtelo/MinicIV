@@ -39,7 +39,7 @@ class MusicCache:
                 del self.musics[music_key]
 
     def get_length(self):
-        return len(self.members)
+        return len(self.musics)
 
     def get_music_data(self, video_id: str, refresh: bool = False) -> MusicData:
         now = datetime.now()
