@@ -47,7 +47,7 @@ class ShteloTime:
 
     def convert(self) -> datetime:
         if self.term > len(ShteloTime.START_POINTS):
-            return
+            return datetime(1970, 1, 1, 0, 0, 0)
         start_point = ShteloTime.START_POINTS[self.term - 1]
         start_point -= timedelta(days=start_point.weekday())
 

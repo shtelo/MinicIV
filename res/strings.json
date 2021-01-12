@@ -496,6 +496,18 @@
             "template": "{hours}시간 {minutes}분 {seconds}초 후({datetime})에 알려드릴게요!\n> {content}",
             "notify": "{mention} 시간이 종료되었습니다!!\n> {content}"
           }
+        },
+        "translate": {
+          "name": [
+            "번역"
+          ],
+          "description": "문장을 번역합니다.",
+          "strings": {
+            "target_language_unknown": "번역 대상 언어 정보를 확인할 수 없습니다.",
+            "source_language_unknown": "번역 출발 언어가 지원되지 않습니다. 미닉은 {languages}{eul_reul} 번역할 수 있습니다.",
+            "translation_unavailable": "{source_language}{eun_neun} {target_language}{euro} 번역할 수 없습니다. {source_language}{eul_reul} 번역할 수 있는 언어는 다음과 같습니다.\n> {languages}",
+            "template": "> {translated}"
+          }
         }
       }
     },

@@ -7,9 +7,10 @@ from discord.ext import commands, tasks
 from discord.ext.commands import Bot, Context, CommandNotFound, CommandError, TextChannelConverter
 
 from cogs.shtelo.bot_protocol import BotProtocol, Request
-from manager import Memo, MemoManager, DatetimeConverter, MusicCache
-from manager.member_cache import MemberCache
+from manager import Memo, MemoManager, DatetimeConverter, MusicCache, LanguageName, MemberCache
+from manager.language import LANGUAGE_UNKNOWN
 from util import load_strings, get_strings
+from util.naver_api import language_detect, translate, TRANSLATABLES
 from util.postposition import euro, eul_reul, i_ga, a_ya, eun_neun
 
 
@@ -209,6 +210,28 @@ class Util(commands.Cog):
         tasks_ = (ctx.send(message_content), ctx.author.send(message_content))
         await sleep(delta)
         await wait(tasks_)
+
+    @commands.command(aliases=strings()['command']['translate']['name'],
+                      description=strings()['command']['translate']['description'])
+    async def translate(self, ctx: Context, target_language: LanguageName, *, content: str):
+        if target_language == LANGUAGE_UNKNOWN:
+            await ctx.send(strings()['command']['translate']['strings']['target_language_unknown'])
+            return
+        elif (source_language := language_detect(content)) not in TRANSLATABLES:
+            languages = '`' + '`, `'.join(str(language) for language in TRANSLATABLES.keys()) + '`'
+            await ctx.send(strings()['command']['translate']['strings']['source_language_unknown'].format(
+                languages=languages, eul_reul=eul_reul(languages[-2])))
+            return
+        elif target_language not in (languages := TRANSLATABLES[source_language]):
+            languages = '`' + '`, `'.join(str(language) for language in languages) + '`'
+            await ctx.send(strings()['command']['translate']['strings']['translation_unavailable'].format(
+                source_language=source_language, eun_neun=eun_neun(str(source_language)),
+                target_language=target_language, euro=euro(str(target_language)),
+                eul_reul=eul_reul(str(source_language)), languages=languages))
+            return
+
+        translated = translate(source_language, target_language, content)['message']['result']['translatedText']
+        await ctx.send(strings()['command']['translate']['strings']['template'].format(translated=translated))
 
 
 def setup(client: Bot):
