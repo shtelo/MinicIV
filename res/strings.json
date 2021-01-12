@@ -373,6 +373,16 @@
           "strings": {
             "succeed": "반응 {count}개가 새로고침 되었습니다."
           }
+        },
+        "hangang_temperature": {
+          "name": [
+            "한강",
+            "한강물온도"
+          ],
+          "description": "실시간 한강 물 온도를 확인합니다.",
+          "strings": {
+            "template": "현재 한강물의 온도는 `{temperature}°C`입니다. (측정 시각: `{measured_at}`)"
+          }
         }
       }
     },

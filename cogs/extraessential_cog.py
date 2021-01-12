@@ -11,7 +11,7 @@ from discord.ext.commands import Bot, Context, MemberNotFound
 from manager import TypingManager, TypingGame, BabelManager, AttendanceManager, Dice, EmojiReactionManager, \
     MemoManager, EconomyManager, MusicCache
 from manager.member_cache import MemberCache
-from util import get_keys, get_strings, get_const
+from util import get_keys, get_strings, get_const, get_hangang_temperature
 from util.postposition import i_ga
 
 
@@ -407,6 +407,13 @@ class ExtraessentialCog(commands.Cog):
         for reactions in map_.values():
             count += len(reactions)
         await ctx.send(strings()['command']['emoji_reaction.refresh']['strings']['succeed'].format(count=count))
+
+    @commands.command(aliases=strings()['command']['hangang_temperature']['name'],
+                      description=strings()['command']['hangang_temperature']['description'])
+    async def hangang_temperature(self, ctx: Context):
+        information = get_hangang_temperature()
+        await ctx.send(strings()['command']['hangang_temperature']['strings']['template'].format(
+            temperature=information['temp'], measured_at=information['time']))
 
 
 def setup(client: Bot):
