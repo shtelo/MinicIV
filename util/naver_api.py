@@ -50,5 +50,5 @@ def translate(source_language: LanguageName, target_language: LanguageName, sent
 
 
 if __name__ == '__main__':
-    print(translate(LANGUAGE_KO, LANGUAGE_JA, '안녕하세요. 지금 뭐 하고 계세요?'))
+    print(translate(LANGUAGE_KO, LANGUAGE_ZH_CN, '안녕하세요. 지금 뭐 하고 계세요?'))
     print(language_detect('안녕하세요.'))
