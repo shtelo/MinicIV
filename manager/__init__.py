@@ -11,3 +11,4 @@ from .datetime_converter import DatetimeConverter
 from .music_cache import MusicCache
 from .member_cache import MemberCache
 from .language import LanguageName
+from .announcement_manager import AnnouncementManager

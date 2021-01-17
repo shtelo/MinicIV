@@ -630,6 +630,46 @@
             "no_shtelo": "슈텔로가 존재하지 않았던 시점이에요.",
             "date": "{year}년 {month}월 {day}일"
           }
+        },
+        "announcement": {
+          "name": [
+            "공지",
+            "お知らせ"
+          ],
+          "description": "일정 시간마다 공지사항을 업로드합니다.",
+          "strings": {
+            "template": "현재 쿨타임이 `{cool_time:.3f} 초` 남았습니다."
+          }
+        },
+        "announcement.add": {
+          "name": [
+            "추가",
+            "追加"
+          ],
+          "description": "공지사항 메시지를 추가합니다.",
+          "strings": {
+            "succeed": "성공적으로 공지사항을 추가했습니다.\n> {string}"
+          }
+        },
+        "announcement.list": {
+          "name": [
+            "목록",
+            "目録"
+          ],
+          "description": "공지사항 목록을 확인합니다.",
+          "strings": {
+            "template": "> `ID: {id}` {string}"
+          }
+        },
+        "announcement.delete": {
+          "name": [
+            "삭제",
+            "削除"
+          ],
+          "description": "공지사항 메시지를 삭제합니다.",
+          "strings": {
+            "succeed": "공지사항을 성공적으로 삭제했습니다.\n> `ID: {id}` {string}"
+          }
         }
       }
     },

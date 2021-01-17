@@ -1,11 +1,11 @@
 from asyncio import wait
 from datetime import timedelta, datetime
 
-from discord import Member, Embed
+from discord import Member, Embed, Message
 from discord.ext import commands
 from discord.ext.commands import Bot, Context
 
-from manager import WeekDay, ShteloTime
+from manager import WeekDay, ShteloTime, AnnouncementManager
 from util import get_strings, get_const
 
 
@@ -14,6 +14,18 @@ def strings():
 
 
 class ShteloCog(commands.Cog):
+    def __init__(self, client: Bot):
+        self.client = client
+        self.announcement_manager = AnnouncementManager(self.client)
+
+        self.announcement_manager.idler.start()
+
+    @commands.Cog.listener()
+    async def on_message(self, message: Message):
+        if message.channel.id == self.announcement_manager.channel.id:
+            self.announcement_manager.cool_time -= self.announcement_manager.decrease_for_message
+            self.announcement_manager.tick()
+
     @commands.command(aliases=strings()['command']['administrator_vote']['name'],
                       description=strings()['command']['administrator_vote']['description'])
     async def administrator_vote(self, ctx: Context, *members: Member):
@@ -63,6 +75,45 @@ class ShteloCog(commands.Cog):
         else:
             await ctx.send(strings()['command']['shtelian_calendar']['strings']['date'].format(
                 year=date.year, month=date.month, day=date.day))
+
+    @commands.group(aliases=strings()['command']['announcement']['name'],
+                    description=strings()['command']['announcement']['description'],
+                    invoke_without_command=True)
+    async def announcement(self, ctx: Context):
+        self.announcement_manager.tick()
+        await ctx.send(strings()['command']['announcement']['strings']['template'].format(
+            cool_time=self.announcement_manager.cool_time))
+
+    @announcement.command(aliases=strings()['command']['announcement.add']['name'],
+                          description=strings()['command']['announcement.add']['description'])
+    @commands.has_role('파트너')
+    async def announcement_add(self, ctx: Context, *, string: str):
+        AnnouncementManager.add_announcement(string)
+        await ctx.send(strings()['command']['announcement.add']['strings']['succeed'].format(string=string))
+        self.announcement_manager.refresh_announcements()
+
+    @announcement.command(aliases=strings()['command']['announcement.list']['name'],
+                          description=strings()['command']['announcement.list']['description'])
+    async def announcement_list(self, ctx: Context):
+        content = []
+
+        for announcement in AnnouncementManager.get_announcements():
+            id_ = announcement['id']
+            string = announcement['string']
+            content.append(strings()['command']['announcement.list']['strings']['template'].format(
+                string=string, id=id_))
+        await ctx.send('\n'.join(content))
+        self.announcement_manager.refresh_announcements()
+
+    @announcement.command(aliases=strings()['command']['announcement.delete']['name'],
+                          description=strings()['command']['announcement.delete']['description'])
+    @commands.has_role('파트너')
+    async def announcement_delete(self, ctx: Context, id_: int):
+        announcement = AnnouncementManager.get_announcement(id_)
+        AnnouncementManager.delete_announcement(id_)
+        await ctx.send(strings()['command']['announcement.delete']['strings']['succeed'].format(
+            string=announcement['string'], id=id_))
+        self.announcement_manager.refresh_announcements()
 
 
 def setup(client: Bot):

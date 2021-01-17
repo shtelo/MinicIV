@@ -41,6 +41,8 @@ class Util(commands.Cog):
         self.member_cache = MemberCache()
         self.music_cache = MusicCache()
 
+        self.optimize_cache.start()
+
     @tasks.loop(seconds=1800.0)
     async def optimize_cache(self):
         self.member_cache.optimize_cache()
