@@ -11,7 +11,7 @@ from util import database, get_const
 
 class AnnouncementManager:
     def __init__(self, client: Bot, channel: Optional[TextChannel] = None,
-                 max_cool_time: float = 1800.0, decrease_for_message: float = 30.0):
+                 max_cool_time: float = 5400.0, decrease_for_message: float = 30.0):
         self.client = client
         self.channel = channel
         self.max_cool_time = max_cool_time
