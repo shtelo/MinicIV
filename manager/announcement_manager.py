@@ -1,39 +1,31 @@
-from time import time
 from typing import Optional
 
 from discord import TextChannel
-from discord.ext import tasks
 from discord.ext.commands import Bot
 from pymysql.cursors import DictCursor
 
-from util import database, get_const
+from util import database
 
 
 class AnnouncementManager:
-    def __init__(self, client: Bot, channel: Optional[TextChannel] = None,
-                 max_cool_time: float = 5400.0, decrease_for_message: float = 30.0):
+    def __init__(self, client: Bot, channel: Optional[TextChannel] = None, max_cool_message: int = 100):
         self.client = client
         self.channel = channel
-        self.max_cool_time = max_cool_time
-        self.cool_time = self.max_cool_time
-        self.decrease_for_message = decrease_for_message
-        self.last_call = time()
+        self.max_cool_message = max_cool_message
+
+        self.cool_message = self.max_cool_message
         self.announcements = []
         self.next_announcement_index = 0
         self.refresh_announcements()
 
-    def is_cool_time_done(self) -> bool:
-        if self.cool_time <= 0:
-            self.cool_time += self.max_cool_time
-            return True
-        return False
-
-    def tick(self):
-        now = time()
-
-        self.cool_time -= now - self.last_call
-
-        self.last_call = now
+    async def tick(self):
+        self.cool_message -= 1
+        if self.cool_message <= 0:
+            if not self.next_announcement_index:
+                self.refresh_announcements()
+            self.cool_message += self.max_cool_message
+            announcement = self.get_next_announcement()
+            await self.channel.send(announcement['string'])
 
     def get_next_announcement(self) -> dict:
         if self.next_announcement_index >= len(self.announcements):
@@ -45,15 +37,6 @@ class AnnouncementManager:
     def refresh_announcements(self):
         self.announcements = AnnouncementManager.get_announcements()
         return self
-
-    @tasks.loop(seconds=20.0)
-    async def idler(self):
-        self.tick()
-        if self.channel is None:
-            self.channel = self.client.get_channel(get_const()['channel']['central_park'])
-        if self.is_cool_time_done():
-            announcement = self.get_next_announcement()
-            await self.channel.send(announcement['string'])
 
     @staticmethod
     def get_announcements() -> tuple:

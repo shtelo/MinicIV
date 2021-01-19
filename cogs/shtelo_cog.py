@@ -16,15 +16,14 @@ def strings():
 class ShteloCog(commands.Cog):
     def __init__(self, client: Bot):
         self.client = client
-        self.announcement_manager = AnnouncementManager(self.client)
-
-        self.announcement_manager.idler.start()
+        self.announcement_manager = AnnouncementManager(self.client, max_cool_message=80)
 
     @commands.Cog.listener()
     async def on_message(self, message: Message):
-        if message.channel.id == self.announcement_manager.channel.id:
-            self.announcement_manager.cool_time -= self.announcement_manager.decrease_for_message
-            self.announcement_manager.tick()
+        if self.announcement_manager.channel is None:
+            self.announcement_manager.channel = self.client.get_channel(get_const()['channel']['central_park'])
+        if message.channel == self.announcement_manager.channel:
+            await self.announcement_manager.tick()
 
     @commands.command(aliases=strings()['command']['administrator_vote']['name'],
                       description=strings()['command']['administrator_vote']['description'])
@@ -82,7 +81,7 @@ class ShteloCog(commands.Cog):
     async def announcement(self, ctx: Context):
         self.announcement_manager.tick()
         await ctx.send(strings()['command']['announcement']['strings']['template'].format(
-            cool_time=self.announcement_manager.cool_time))
+            cool_message=self.announcement_manager.cool_message))
 
     @announcement.command(aliases=strings()['command']['announcement.add']['name'],
                           description=strings()['command']['announcement.add']['description'])

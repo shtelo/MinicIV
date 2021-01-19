@@ -638,7 +638,7 @@
           ],
           "description": "일정 시간마다 공지사항을 업로드합니다.",
           "strings": {
-            "template": "현재 쿨타임이 `{cool_time:.3f} 초` 남았습니다."
+            "template": "현재 공지까지 메시지 `{cool_message} 개` 남았습니다."
           }
         },
         "announcement.add": {
