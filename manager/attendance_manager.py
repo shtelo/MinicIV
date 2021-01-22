@@ -51,3 +51,9 @@ class AttendanceManager:
         with database.cursor() as cursor:
             cursor.execute('SELECT * FROM attendance ORDER BY strike DESC')
             return cursor.fetchall()
+
+    @staticmethod
+    def remove_leader(member_id: int):
+        with database.cursor() as cursor:
+            cursor.execute('DELETE FROM attendance WHERE member_id = %s', member_id)
+            database.commit()

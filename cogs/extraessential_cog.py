@@ -6,7 +6,7 @@ from typing import Optional
 
 from discord import Message, Member, Embed, VoiceChannel, Guild, Game
 from discord.ext import commands, tasks
-from discord.ext.commands import Bot, Context, MemberNotFound
+from discord.ext.commands import Bot, Context
 
 from manager import TypingManager, TypingGame, BabelManager, AttendanceManager, Dice, EmojiReactionManager, \
     MemoManager, EconomyManager, MusicCache
@@ -262,9 +262,8 @@ class ExtraessentialCog(commands.Cog):
         records = TypingManager.get_records_ordered(limit, language)
         contents = []
         for i, record in enumerate(records):
-            try:
-                member = await self.member_cache.get_member(record['author'], ctx)
-            except MemberNotFound:
+            member = await self.member_cache.get_member(record['author'], ctx)
+            if member is None:
                 TypingManager.delete_record(record['author'])
                 continue
             contents.append(strings()['command']['typing.records']['strings']['line_template'].format(
@@ -319,10 +318,14 @@ class ExtraessentialCog(commands.Cog):
             emoji = ':fire:' if date_ == today \
                 else ':exclamation:' if date_ >= today - timedelta(days=1) \
                 else ''
-            description.append(strings()['command']['attendance.leaderboard']['strings']['template'].format(
-                place=i + 1 - offset, member=(await self.member_cache.get_member(member_id, ctx)).display_name,
-                strike=strike, emoji=emoji))
-            previous_strike = strike
+            member = await self.member_cache.get_member(member_id, ctx)
+            if member is None:
+                AttendanceManager.remove_leader(member_id)
+            else:
+                description.append(strings()['command']['attendance.leaderboard']['strings']['template'].format(
+                    place=i + 1 - offset, member=member.display_name,
+                    strike=strike, emoji=emoji))
+                previous_strike = strike
         embed = Embed(title=strings()['command']['attendance.leaderboard']['strings']['embed_title'],
                       description='\n'.join(description), colour=get_const()['color']['sch_vanilla'])
         await ctx.send(embed=embed)
@@ -414,7 +417,7 @@ class ExtraessentialCog(commands.Cog):
         information = get_hangang_temperature()
         temperature = float(information['temp'])
         if unit.lower() in ('화씨', 'f', 'fahrenheit'):
-            temperature = temperature * 9/5 + 32
+            temperature = temperature * 9 / 5 + 32
             unit = 'F'
         else:
             unit = 'C'

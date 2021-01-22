@@ -1,8 +1,8 @@
 from datetime import datetime, timedelta
-from typing import Optional
+from typing import Optional, Union
 
 from discord import Member
-from discord.ext.commands import Context, MemberConverter
+from discord.ext.commands import Context, MemberConverter, MemberNotFound
 
 from util import singleton
 
@@ -34,10 +34,15 @@ class MemberCache:
     def get_length(self):
         return len(self.members)
 
-    async def get_member(self, member_id: int, ctx: Optional[Context] = None, refresh: bool = False) -> Member:
+    async def get_member(self, member_id: Union[int, str], ctx: Optional[Context] = None, refresh: bool = False) \
+            -> Optional[Member]:
         now = datetime.now()
         if refresh or member_id not in self.members or self.members[member_id].last_call < now - timedelta(days=1):
             # noinspection PyTypeChecker
-            member = await MemberConverter().convert(ctx, member_id)
-            self.members[member_id] = MemberData(member, now)
+            try:
+                member = await MemberConverter().convert(ctx, member_id)
+            except MemberNotFound:
+                return
+            else:
+                self.members[member_id] = MemberData(member, now)
         return self.members[member_id].get_data(now)
