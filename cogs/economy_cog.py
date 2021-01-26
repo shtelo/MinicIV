@@ -13,7 +13,7 @@ def strings():
     return get_strings()['cog']['economy']
 
 
-class EconomyCog(commands.Cog):
+class Economy(commands.Cog):
     def __init__(self, client: Bot):
         self.client = client
         self.currency: str = strings()['currency']['terro']
@@ -90,4 +90,4 @@ class EconomyCog(commands.Cog):
 
 
 def setup(client: Bot):
-    client.add_cog(EconomyCog(client))
+    client.add_cog(Economy(client))

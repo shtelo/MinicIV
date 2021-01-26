@@ -5,7 +5,7 @@ from discord.ext import commands
 
 from util import get_strings
 
-client = commands.Bot([get_strings()['command_prefix']], intent=Intents.all())
+client = commands.Bot([get_strings()['command_prefix']], intent=Intents.all(), help_command=None)
 
 for file_name in listdir('./cogs'):
     if file_name.endswith('.py'):

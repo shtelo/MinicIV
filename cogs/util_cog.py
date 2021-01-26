@@ -2,14 +2,14 @@ from asyncio import wait, TimeoutError as AsyncioTimeoutError, sleep
 from datetime import datetime
 from typing import Optional
 
-from discord import VoiceChannel, Message, TextChannel
+from discord import VoiceChannel, Message, TextChannel, Embed
 from discord.ext import commands, tasks
-from discord.ext.commands import Bot, Context, CommandNotFound, CommandError, TextChannelConverter
+from discord.ext.commands import Bot, Context, CommandNotFound, CommandError, TextChannelConverter, Command
 
 from cogs.shtelo.bot_protocol import BotProtocol, Request
 from manager import Memo, MemoManager, DatetimeConverter, MusicCache, LanguageName, MemberCache
 from manager.language import LANGUAGE_UNKNOWN
-from util import load_strings, get_strings
+from util import load_strings, get_strings, get_const
 from util.naver_api import language_detect, translate, TRANSLATABLES
 from util.postposition import euro, eul_reul, i_ga, a_ya, eun_neun
 
@@ -234,6 +234,34 @@ class Util(commands.Cog):
 
         translated = translate(source_language, target_language, content)['message']['result']['translatedText']
         await ctx.send(strings()['command']['translate']['strings']['template'].format(translated=translated))
+
+    @commands.command(aliases=strings()['command']['help']['name'],
+                      description=strings()['command']['help']['description'])
+    async def help(self, ctx: Context, command_name: str = ''):
+        if command_name:
+            command = self.client.get_command(command_name)
+            params = list()
+            for param_name, param in command.clean_params.items():
+                if param.default:
+                    params.append(f"[{param.name}: {param.annotation.__name__}]")
+                else:
+                    params.append(f'<{param.name}: {param.annotation.__name__}>')
+            params = ' '.join(params)
+            await ctx.send(strings()['command']['help']['strings']['command_template'].format(
+                command=f"{get_strings()['command_prefix']}{command_name} {params}", description=command.description))
+        else:
+            embed = Embed(title='명령어 목록', colour=get_const()['color']['sch_vanilla'])
+            for cog_name in get_strings()['cog'].keys():
+                cog = self.client.get_cog(cog_name.title())
+                param = []
+                for command in cog.get_commands():
+                    command: Command
+                    param.append(strings()['command']['help']['strings']['template'].format(
+                        prefix=get_strings()['command_prefix'],
+                        aliases='[' + '|'.join([command.name] + command.aliases) + ']',
+                        description=command.description))
+                embed.add_field(name=cog_name.title(), value='\n'.join(param), inline=False)
+            await ctx.send(embed=embed)
 
 
 def setup(client: Bot):

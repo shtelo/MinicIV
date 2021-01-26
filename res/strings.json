@@ -589,6 +589,17 @@
             "translation_unavailable": "{source_language}{eun_neun} {target_language}{euro} 번역할 수 없습니다. {source_language}{eul_reul} 번역할 수 있는 언어는 다음과 같습니다.\n> {languages}",
             "template": "> {translated}"
           }
+        },
+        "help": {
+          "name": [
+            "도움말",
+            "?"
+          ],
+          "description": "사용 가능한 커맨드 목록을 확인하고 커맨드의 사용법을 확인합니다.",
+          "strings": {
+            "template": "＊ `{prefix}{aliases}` - {description}",
+            "command_template": "> **`{command}`**\n> - {description}"
+          }
         }
       }
     },

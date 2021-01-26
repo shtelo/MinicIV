@@ -13,7 +13,7 @@ def strings():
     return get_strings()['cog']['shtelo']
 
 
-class ShteloCog(commands.Cog):
+class Shtelo(commands.Cog):
     def __init__(self, client: Bot):
         self.client = client
         self.announcement_manager = AnnouncementManager(self.client, max_cool_message=80)
@@ -116,4 +116,4 @@ class ShteloCog(commands.Cog):
 
 
 def setup(client: Bot):
-    client.add_cog(ShteloCog(client))
+    client.add_cog(Shtelo(client))

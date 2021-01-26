@@ -19,7 +19,7 @@ def strings():
     return get_strings()['cog']['extraessential']
 
 
-class ExtraessentialCog(commands.Cog):
+class Extraessential(commands.Cog):
     def __init__(self, client: Bot):
         self.client = client
         self.typing_manager = TypingManager()
@@ -426,4 +426,4 @@ class ExtraessentialCog(commands.Cog):
 
 
 def setup(client: Bot):
-    client.add_cog(ExtraessentialCog(client))
+    client.add_cog(Extraessential(client))
