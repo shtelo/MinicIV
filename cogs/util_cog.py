@@ -240,6 +240,10 @@ class Util(commands.Cog):
     async def help(self, ctx: Context, command_name: str = ''):
         if command_name:
             command = self.client.get_command(command_name)
+            if not command:
+                await ctx.send(strings()['command']['help']['strings']['command_not_found'].format(
+                    command_name=command_name, eul_reul=eul_reul(command_name)))
+                return
             params = list()
             for param_name, param in command.clean_params.items():
                 if param.default:
