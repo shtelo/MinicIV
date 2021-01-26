@@ -140,3 +140,4 @@ cython_debug/
 # IntelliJ Project
 .idea/
 songs/*
+res/message.txt
