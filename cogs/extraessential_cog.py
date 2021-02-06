@@ -318,14 +318,10 @@ class Extraessential(commands.Cog):
             emoji = ':fire:' if date_ == today \
                 else ':exclamation:' if date_ >= today - timedelta(days=1) \
                 else ''
-            member = await self.member_cache.get_member(member_id, ctx)
-            if member is None:
-                AttendanceManager.remove_leader(member_id)
-            else:
-                description.append(strings()['command']['attendance.leaderboard']['strings']['template'].format(
-                    place=i + 1 - offset, member=member.display_name,
-                    strike=strike, emoji=emoji))
-                previous_strike = strike
+            member = await self.member_cache.get_member(member_id, ctx)  # todo things if member is not on server
+            description.append(strings()['command']['attendance.leaderboard']['strings']['template'].format(
+                place=i + 1 - offset, member=member.display_name, strike=strike, emoji=emoji))
+            previous_strike = strike
         embed = Embed(title=strings()['command']['attendance.leaderboard']['strings']['embed_title'],
                       description='\n'.join(description), colour=get_const()['color']['sch_vanilla'])
         await ctx.send(embed=embed)

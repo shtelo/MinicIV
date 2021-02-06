@@ -50,7 +50,6 @@ class AttendanceManager:
     def get_leaderboard() -> tuple:
         with database.cursor() as cursor:
             cursor.execute('SELECT * FROM attendance ORDER BY strike DESC')
-            database.commit()
             return cursor.fetchall()
 
     @staticmethod
