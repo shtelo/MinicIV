@@ -35,7 +35,7 @@ class Shtelo(commands.Cog):
             colour=get_const()['color']['sch_vanilla'])
         embed.set_thumbnail(url=ctx.guild.icon_url)
         emojis = strings()['command']['administrator_vote']['emojis']
-        reactions = []
+        reactions = list()
         for i, member in enumerate(members):
             embed.add_field(name=emojis[i], value=member.mention)
             reactions.append(emojis[i])
@@ -94,7 +94,7 @@ class Shtelo(commands.Cog):
     @announcement.command(aliases=strings()['command']['announcement.list']['name'],
                           description=strings()['command']['announcement.list']['description'])
     async def announcement_list(self, ctx: Context):
-        content = []
+        content = list()
 
         for announcement in AnnouncementManager.get_announcements():
             id_ = announcement['id']

@@ -41,7 +41,7 @@ def get_video_id(value: str) -> str:
 class Music(commands.Cog):
     """통화방에서 유튜브 음악을 재생하기 위해 사용되는 Cog입니다."""
 
-    download_queue = []
+    download_queue = list()
 
     @classmethod
     def download_music(cls, url: str, filename: str):
@@ -112,7 +112,7 @@ class Music(commands.Cog):
             await channel.connect()
 
         if guild_id not in self.queues.keys():
-            self.queues[guild_id] = []
+            self.queues[guild_id] = list()
 
     async def _join(self, ctx) -> bool:
         """

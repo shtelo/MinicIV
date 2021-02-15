@@ -28,7 +28,7 @@ def get_const():
 
 
 def get_shtelo_times() -> list:
-    result = []
+    result = list()
     for year, month, day in __const['shtelo_times']:
         result.append(datetime(year, month, day))
     return result

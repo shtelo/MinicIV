@@ -14,7 +14,7 @@ class AnnouncementManager:
         self.max_cool_message = max_cool_message
 
         self.cool_message = self.max_cool_message
-        self.announcements = []
+        self.announcements = list()
         self.next_announcement_index = 0
         self.refresh_announcements()
 

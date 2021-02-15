@@ -69,7 +69,7 @@ class Util(commands.Cog):
     @commands.command(aliases=strings()['command']['move']['name'],
                       description=strings()['command']['move']['description'])
     async def move(self, ctx: Context, from_channel: VoiceChannel, to_channel: VoiceChannel):
-        tasks_ = []
+        tasks_ = list()
         for member_id in from_channel.voice_states.keys():
             tasks_.append((await self.member_cache.get_member(member_id, ctx)).edit(voice_channel=to_channel))
         await wait(tasks_)
@@ -88,7 +88,7 @@ class Util(commands.Cog):
                 await ctx.send(strings()['command']['gather']['strings']['invalid_id'])
                 return
 
-        tasks_ = []
+        tasks_ = list()
         for voice_channel in ctx.guild.voice_channels:
             if voice_channel.id not in (ctx.guild.afk_channel.id, destination_channel.id):
                 for member in voice_channel.members:
@@ -257,7 +257,7 @@ class Util(commands.Cog):
             embed = Embed(title='명령어 목록', colour=get_const()['color']['sch_vanilla'])
             for cog_name in get_strings()['cog'].keys():
                 cog = self.client.get_cog(cog_name.title())
-                param = []
+                param = list()
                 for command in cog.get_commands():
                     command: Command
                     param.append(strings()['command']['help']['strings']['template'].format(

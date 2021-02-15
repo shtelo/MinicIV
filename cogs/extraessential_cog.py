@@ -260,7 +260,7 @@ class Extraessential(commands.Cog):
         else:
             language = -1
         records = TypingManager.get_records_ordered(limit, language)
-        contents = []
+        contents = list()
         for i, record in enumerate(records):
             member = await self.member_cache.get_member(record['author'], ctx)
             if member is None:
@@ -305,7 +305,7 @@ class Extraessential(commands.Cog):
     @attendance.command(aliases=strings()['command']['attendance.leaderboard']['name'],
                         description=strings()['command']['attendance.leaderboard']['description'])
     async def attendance_leaderboard(self, ctx: Context):
-        description = []
+        description = list()
         today = date.today()
         previous_strike = -1
         offset = 0
@@ -332,7 +332,7 @@ class Extraessential(commands.Cog):
     async def babel(self, ctx: Context):
         leaderboard = BabelManager.get_leaderboard()
         if leaderboard:
-            description = []
+            description = list()
             for i, leader in enumerate(leaderboard):
                 floor = leader['floor']
                 member = await self.member_cache.get_member(leader['member_id'], ctx)
