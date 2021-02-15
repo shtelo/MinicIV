@@ -79,7 +79,7 @@ class Shtelo(commands.Cog):
                     description=strings()['command']['announcement']['description'],
                     invoke_without_command=True)
     async def announcement(self, ctx: Context):
-        self.announcement_manager.tick()
+        await self.announcement_manager.tick()
         await ctx.send(strings()['command']['announcement']['strings']['template'].format(
             cool_message=self.announcement_manager.cool_message))
 
