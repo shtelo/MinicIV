@@ -336,9 +336,8 @@ class Extraessential(commands.Cog):
             for i, leader in enumerate(leaderboard):
                 floor = leader['floor']
                 member = await self.member_cache.get_member(leader['member_id'], ctx)
-                if member is not None:
-                    description.append(strings()['command']['babel']['strings']['template'].format(
-                        place=i + 1, display_name=member.display_name, floor=floor))
+                description.append(strings()['command']['babel']['strings']['template'].format(
+                    place=i + 1, display_name=member.display_name, floor=floor))
             description = '\n'.join(description)
         else:
             description = strings()['command']['babel']['strings']['no_leaderboard']
