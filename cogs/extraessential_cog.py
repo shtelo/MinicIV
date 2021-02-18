@@ -319,6 +319,9 @@ class Extraessential(commands.Cog):
                 else ':exclamation:' if date_ >= today - timedelta(days=1) \
                 else ''
             member = await self.member_cache.get_member(member_id, ctx)  # todo things if member is not on server
+            if member is None:
+                print(f'member({member_id}) is None')
+                continue
             description.append(strings()['command']['attendance.leaderboard']['strings']['template'].format(
                 place=i + 1 - offset, member=member.display_name, strike=strike, emoji=emoji))
             previous_strike = strike
@@ -336,9 +339,8 @@ class Extraessential(commands.Cog):
             for i, leader in enumerate(leaderboard):
                 floor = leader['floor']
                 member = await self.member_cache.get_member(leader['member_id'], ctx)
-                if member is not None:
-                    description.append(strings()['command']['babel']['strings']['template'].format(
-                        place=i + 1, display_name=member.display_name, floor=floor))
+                description.append(strings()['command']['babel']['strings']['template'].format(
+                    place=i + 1, display_name=member.display_name, floor=floor))
             description = '\n'.join(description)
         else:
             description = strings()['command']['babel']['strings']['no_leaderboard']
