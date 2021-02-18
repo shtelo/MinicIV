@@ -320,7 +320,6 @@ class Extraessential(commands.Cog):
                 else ''
             member = await self.member_cache.get_member(member_id, ctx)  # todo things if member is not on server
             if member is None:
-                print(f'member({member_id}) is None')
                 continue
             description.append(strings()['command']['attendance.leaderboard']['strings']['template'].format(
                 place=i + 1 - offset, member=member.display_name, strike=strike, emoji=emoji))
