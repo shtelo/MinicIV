@@ -42,9 +42,7 @@ class MemberCache:
             try:
                 member = await MemberConverter().convert(ctx, member_id)
             except MemberNotFound:
-                print('member is not found')
                 return
             else:
                 self.members[member_id] = MemberData(member, now)
-        print('member is found and returned the member')
         return self.members[member_id].get_data(now)
