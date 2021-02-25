@@ -1,7 +1,12 @@
+from json import load
+
 from discord.ext.commands import Converter, Context
 
 
 class LanguageName(Converter, int):
+    with open('./res/language_names.json', 'r', encoding='utf-8') as file:
+        LANGUAGE_NAMES = load(file)
+
     @staticmethod
     def to_language_name(code: str):
         return TO_LANGUAGE_NAME[code]
@@ -17,41 +22,41 @@ class LanguageName(Converter, int):
 
     async def convert(self, ctx: Context, argument: str):
         argument = argument.lower()
-        if argument in ('ko', 'korean', '한국어', '한국'):
+        if argument in LanguageName.LANGUAGE_NAMES['ko']:
             return LANGUAGE_KO
-        elif argument in ('ja', 'japanese', '일본어', '일본'):
+        elif argument in LanguageName.LANGUAGE_NAMES['ja']:
             return LANGUAGE_JA
-        elif argument in ('zh-cn', 'zh_cn', '중국어', '중국', '간체'):
+        elif argument in LanguageName.LANGUAGE_NAMES['zh-cn']:
             return LANGUAGE_ZH_CN
-        elif argument in ('zh-tw', 'zh_tw', '번체'):
+        elif argument in LanguageName.LANGUAGE_NAMES['zh-tw']:
             return LANGUAGE_ZH_TW
-        elif argument in ('hi', 'hindi', '힌디어', '힌디'):
+        elif argument in LanguageName.LANGUAGE_NAMES['hi']:
             return LANGUAGE_HI
-        elif argument in ('en', 'english', '영어'):
+        elif argument in LanguageName.LANGUAGE_NAMES['en']:
             return LANGUAGE_EN
-        elif argument in ('es', 'spanish', '스페인어', '스페인'):
+        elif argument in LanguageName.LANGUAGE_NAMES['es']:
             return LANGUAGE_ES
-        elif argument in ('fr', 'french', '프랑스어', '프랑스'):
+        elif argument in LanguageName.LANGUAGE_NAMES['fr']:
             return LANGUAGE_FR
-        elif argument in ('de', 'deutsch', 'german', '독일', '독일어'):
+        elif argument in LanguageName.LANGUAGE_NAMES['de']:
             return LANGUAGE_DE
-        elif argument in ('pt', 'portuguese', '포루트갈어', '포르투칼', '포루트갈', '포르투칼어'):
+        elif argument in LanguageName.LANGUAGE_NAMES['pt']:
             return LANGUAGE_PT
-        elif argument in ('vi', 'vietnamese', '베트남어', '베트남'):
+        elif argument in LanguageName.LANGUAGE_NAMES['vi']:
             return LANGUAGE_VI
-        elif argument in ('id', 'indonesian', '인도네시아', '인도네시아어'):
+        elif argument in LanguageName.LANGUAGE_NAMES['id']:
             return LANGUAGE_ID
-        elif argument in ('fa', 'persian', '페르시아어', '페르시아'):
+        elif argument in LanguageName.LANGUAGE_NAMES['fa']:
             return LANGUAGE_FA
-        elif argument in ('ar', 'arabic', '아랍어', '아랍'):
+        elif argument in LanguageName.LANGUAGE_NAMES['ar']:
             return LANGUAGE_AR
-        elif argument in ('mm', 'myanmar', '미얀마어', '미얀마'):
+        elif argument in LanguageName.LANGUAGE_NAMES['mm']:
             return LANGUAGE_MM
-        elif argument in ('th', 'thailand', 'thai', '태국어', '태국'):
+        elif argument in LanguageName.LANGUAGE_NAMES['th']:
             return LANGUAGE_TH
-        elif argument in ('ru', 'russian', '러시아어', '러시아'):
+        elif argument in LanguageName.LANGUAGE_NAMES['ru']:
             return LANGUAGE_RU
-        elif argument in ('it', 'italian', 'italy', '이탈리아어', '이탈리아'):
+        elif argument in LanguageName.LANGUAGE_NAMES['it']:
             return LANGUAGE_IT
         else:
             return LANGUAGE_UNKNOWN
