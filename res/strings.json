@@ -435,7 +435,7 @@
           ],
           "description": "실시간 한강 물 온도를 확인합니다.",
           "strings": {
-            "template": "현재 한강물의 온도는 `{temperature}°{unit}`입니다. (측정 시각: `{measured_at}`)"
+            "template": "현재 한강물의 온도는 `{temperature}°{unit}`입니다. (`{measured_in}`에서 `{measured_at}`에 측정)"
           }
         }
       }

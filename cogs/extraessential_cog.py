@@ -412,15 +412,15 @@ class Extraessential(commands.Cog):
     @commands.command(aliases=strings()['command']['hangang_temperature']['name'],
                       description=strings()['command']['hangang_temperature']['description'])
     async def hangang_temperature(self, ctx: Context, unit: str = 'C'):
-        information = get_hangang_temperature()
-        temperature = float(information['temp'])
+        information, measured_at, measured_in = get_hangang_temperature()
+        temperature = float(information['respond']['temp'])
         if unit.lower() in ('화씨', 'f', 'fahrenheit'):
             temperature = temperature * 9 / 5 + 32
             unit = 'F'
         else:
             unit = 'C'
         await ctx.send(strings()['command']['hangang_temperature']['strings']['template'].format(
-            temperature=temperature, unit=unit, measured_at=information['time']))
+            temperature=temperature, unit=unit, measured_at=measured_at, measured_in=measured_in))
 
 
 def setup(client: Bot):
