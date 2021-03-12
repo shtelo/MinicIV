@@ -735,6 +735,21 @@
             "new_account": "{mention}님의 명의로 새로운 계좌를 만들었습니다. 소지금 : __**0 {currency}**__"
           }
         },
+        "money.list": {
+          "name": [
+            "list",
+            "목록",
+            "リスト",
+            "순위",
+            "順位",
+            "leaderboard"
+          ],
+          "description": "소지금 순위를 학인합니다.",
+          "strings": {
+            "template": "{index}위 **{name}** {amount}{currency}",
+            "embed_title": "돈 순위"
+          }
+        },
         "updown": {
           "name": [
             "업다운",

@@ -1,12 +1,12 @@
 import re
 from asyncio import TimeoutError as AsyncioTimeoutError
 
-from discord import Message
+from discord import Message, Embed
 from discord.ext import commands
 from discord.ext.commands import Bot, Context
 
-from manager import EconomyManager, UpdownGame
-from util import get_strings
+from manager import EconomyManager, UpdownGame, MemberCache
+from util import get_strings, get_const
 
 
 def strings():
@@ -16,10 +16,12 @@ def strings():
 class Economy(commands.Cog):
     def __init__(self, client: Bot):
         self.client = client
+        self.member_cache = MemberCache()
         self.currency: str = strings()['currency']['terro']
 
-    @commands.command(aliases=strings()['command']['money']['name'],
-                      description=strings()['command']['money']['description'])
+    @commands.group(aliases=strings()['command']['money']['name'],
+                    description=strings()['command']['money']['description'],
+                    invoke_without_command=True)
     async def money(self, ctx: Context):
         if account := EconomyManager.get_account(ctx.author.id):
             await ctx.send(strings()['command']['money']['strings']['template'].format(
@@ -28,6 +30,21 @@ class Economy(commands.Cog):
             EconomyManager.new_account(ctx.author.id, force=True)
             await ctx.send(strings()['command']['money']['strings']['new_account'].format(
                 mention=ctx.author.mention, currency=self.currency))
+
+    @money.command(aliases=strings()['command']['money.list']['name'],
+                   description=strings()['command']['money.list']['description'])
+    async def money_list(self, ctx: Context, limit: int = 15):
+        leaderboard = EconomyManager.get_leaderboard(limit)
+
+        contents = list()
+
+        for i, leader_info in enumerate(leaderboard):
+            leader = await self.member_cache.get_member(leader_info['id'], ctx)
+            contents.append(strings()['command']['money.list']['strings']['template'].format(
+                index=i+1, name=leader.display_name, amount=leader_info['property'], currency=self.currency))
+
+        await ctx.send(embed=Embed(title=strings()['command']['money.list']['strings']['embed_title'],
+                                   description='\n'.join(contents), colour=get_const()['color']['sch_vanilla']))
 
     @commands.group(aliases=strings()['command']['updown']['name'],
                     description=strings()['command']['updown']['description'],
