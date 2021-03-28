@@ -25,4 +25,4 @@ for file_name in listdir('./cogs'):
 client_thread = Thread(target=client.run, args=(environ['MINIC_BOT_TOKEN'],))
 client_thread.setDaemon(True)
 client_thread.start()
-restful_launcher.run(port=80)
+restful_launcher.run(host='0.0.0.0', port=3375)
