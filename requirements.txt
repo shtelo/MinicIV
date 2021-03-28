@@ -1,5 +1,6 @@
 discord~=1.0.1
 discord.py~=1.6.0
-youtube-dl~=2021.2.10
-pytube~=10.4.1
+youtube-dl==2021.3.25
+pytube==10.6.0
 PyMySQL~=1.0.2
+Flask~=1.1.2
