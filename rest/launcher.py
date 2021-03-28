@@ -2,12 +2,14 @@ from threading import Thread
 
 from flask import Flask
 from flask_restful import Api
+from flask_cors import CORS
 
 
 class Launcher:
     def __init__(self):
         self.app = Flask(__name__)
         self.api = Api(self.app)
+        CORS(self.app)
         self.thread = Thread(target=self.run, kwargs={'debug': True})
 
         self.thread.setDaemon(True)
