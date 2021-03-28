@@ -4,3 +4,4 @@ youtube-dl==2021.3.25
 pytube==10.6.0
 PyMySQL~=1.0.2
 Flask~=1.1.2
+flask_restful~=0.3.8
