@@ -1,4 +1,5 @@
-from discord import Message, Client
+from discord import Message
+from discord.ext.commands import Bot
 
 
 class Request:
@@ -34,7 +35,7 @@ class BotProtocol:
     SIGNALS = (ECHO, PASS, SEND, HERE, DONE)
 
     def __init__(self, client):
-        self.client: Client = client
+        self.client: Bot = client
 
     def get_request(self, message: Message):
         request = Request(message)
