@@ -135,7 +135,7 @@
             "ボリューム"
           ],
           "description": "재생중인 음악의 크기를 설정합니다.",
-          "string": {
+          "strings": {
             "now": "현재 볼륨: {volume}%",
             "set": "볼륨을 {volume}%로 설정했습니다.",
             "not_playing": "볼륨을 조절할 음악이 없습니다."
