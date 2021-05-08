@@ -433,16 +433,13 @@ class Extraessential(commands.Cog):
             return
         if success_code in strings()['command']['attendance.leaderboard']['name']:
             description = list()
-            for i, leader in enumerate(MazeManager.get_leaderboard()):
-                print(0, i)
-                description.append(this := strings()['command']['maze']['strings']['template'].format(
+            for i, leader in enumerate(this := MazeManager.get_leaderboard()):
+                print(this)
+                description.append(strings()['command']['maze']['strings']['template'].format(
                     i=i+1, member=(await self.member_cache.get_member(ctx.author.id, ctx)).display_name,
                     count=leader['count']))
-                print(1, this)
-            print(2, description)
             embed = Embed(title=strings()['command']['maze']['strings']['embed_title'],
                           description='\n'.join(description), colour=get_const()['color']['sch_vanilla'])
-            print(3)
             await ctx.send(embed=embed)
         elif success_code == requests.get('http://sch.shtelo.org/maze/get-success-code').json()['success-code']:
             requests.get('http://sch.shtelo.org/maze/update')
