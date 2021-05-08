@@ -434,8 +434,11 @@ class Extraessential(commands.Cog):
         if success_code in strings()['command']['attendance.leaderboard']['name']:
             description = list()
             for i, leader in enumerate(MazeManager.get_leaderboard()):
-                description.append(strings()['command']['maze']['strings']['template'].format(
-                    i=i+1, member=ctx.author.display_name, count=leader['count']))
+                member = await self.member_cache.get_member(leader['member_id'], ctx)
+                if member is not None:
+                    description.append(strings()['command']['maze']['strings']['template'].format(
+                        i=i+1, member=member.display_name,
+                        count=leader['count']))
             embed = Embed(title=strings()['command']['maze']['strings']['embed_title'],
                           description='\n'.join(description), colour=get_const()['color']['sch_vanilla'])
             await ctx.send(embed=embed)
