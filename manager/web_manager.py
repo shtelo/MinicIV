@@ -1,10 +1,9 @@
-import logging
 from os.path import join
 
 from flask import Flask, send_file
 
 web_app = Flask(__name__, template_folder='../templates/')
-logging.getLogger('werkzeug').setLevel(logging.ERROR)
+# logging.getLogger('werkzeug').setLevel(logging.ERROR)
 
 
 @web_app.route('/src/<path:path>')
