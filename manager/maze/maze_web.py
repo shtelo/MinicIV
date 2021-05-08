@@ -9,7 +9,7 @@ from util import singleton
 
 @singleton
 class MazeWeb:
-    WIDTH, HEIGHT = 10, 10
+    WIDTH, HEIGHT = 24, 24
     OBJECT = None
 
     def __init__(self):
