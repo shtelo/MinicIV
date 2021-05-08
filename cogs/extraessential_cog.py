@@ -4,13 +4,14 @@ from datetime import date, timedelta, datetime
 from random import choice, randint
 from typing import Optional
 
+import requests
 from discord import Message, Member, Embed, VoiceChannel, Guild, Game
 from discord.ext import commands, tasks
 from discord.ext.commands import Bot, Context
 
 from manager import TypingManager, TypingGame, BabelManager, AttendanceManager, Dice, EmojiReactionManager, \
     MemoManager, EconomyManager, MusicCache
-from manager.maze import MazeWeb, MazeManager
+from manager.maze import MazeManager
 from manager.member_cache import MemberCache
 from util import get_keys, get_strings, get_const, get_hangang_temperature
 from util.postposition import i_ga
@@ -40,8 +41,6 @@ class Extraessential(commands.Cog):
             lambda: f'{self.member_cache.get_length()}명 기억',
             lambda: f'{self.music_cache.get_length()}개 노래 기억'
         ]
-
-        self.maze_web = MazeWeb()
 
         self.activity_switcher.start()
         self.babel_upper.start()
@@ -442,8 +441,8 @@ class Extraessential(commands.Cog):
                           description='\n'.join(description), colour=get_const()['color']['sch_vanilla'])
             await ctx.send(embed=embed)
         else:
-            if success_code == self.maze_web.success_code:
-                self.maze_web.update_maze()
+            if success_code == requests.get('http://sch.shtelo.org/maze/get-success-code').json()['success-code']:
+                requests.get('http://sch.shtelo.org/maze/update')
                 count = MazeManager.add_score(ctx.author.id)
                 await wait((
                     ctx.send(strings()['command']['maze']['strings']['updated'].format(
