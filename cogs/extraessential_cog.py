@@ -10,6 +10,7 @@ from discord.ext.commands import Bot, Context
 
 from manager import TypingManager, TypingGame, BabelManager, AttendanceManager, Dice, EmojiReactionManager, \
     MemoManager, EconomyManager, MusicCache
+from manager.maze import MazeWeb, MazeManager
 from manager.member_cache import MemberCache
 from util import get_keys, get_strings, get_const, get_hangang_temperature
 from util.postposition import i_ga
@@ -39,6 +40,8 @@ class Extraessential(commands.Cog):
             lambda: f'{self.member_cache.get_length()}명 기억',
             lambda: f'{self.music_cache.get_length()}개 노래 기억'
         ]
+
+        self.maze_web = MazeWeb()
 
         self.activity_switcher.start()
         self.babel_upper.start()
@@ -422,6 +425,33 @@ class Extraessential(commands.Cog):
             unit = 'C'
         await ctx.send(strings()['command']['hangang_temperature']['strings']['template'].format(
             temperature=temperature, unit=unit, measured_at=measured_at, measured_in=measured_in))
+
+    @commands.command(aliases=strings()['command']['maze']['name'],
+                      description=strings()['command']['maze']['description'])
+    async def maze(self, ctx: Context, success_code: str = ''):
+        if not success_code:
+            await ctx.send(strings()['command']['maze']['strings']['link'])
+            return
+        if success_code in strings()['command']['attendance.leaderboard']['name']:
+            description = list()
+            for i, leader in enumerate(MazeManager.get_leaderboard()):
+                description.append(strings()['command']['maze']['strings']['template'].format(
+                    i=i+1, member=(await self.member_cache.get_member(ctx.author.id, ctx)).display_name,
+                    count=leader['count']))
+            embed = Embed(title=strings()['command']['maze']['strings']['embed_title'],
+                          description='\n'.join(description), colour=get_const()['color']['sch_vanilla'])
+            await ctx.send(embed=embed)
+        else:
+            if success_code == self.maze_web.success_code:
+                self.maze_web.update_maze()
+                count = MazeManager.add_score(ctx.author.id)
+                await wait((
+                    ctx.send(strings()['command']['maze']['strings']['updated'].format(
+                        count=count, mention=ctx.author.mention)),
+                    ctx.message.delete()
+                ))
+            else:
+                await ctx.send(strings()['command']['maze']['strings']['invalid'])
 
 
 def setup(client: Bot):

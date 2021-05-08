@@ -1,0 +1,40 @@
+body {
+    margin: 0;
+}
+
+.succeed {
+    display: none;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    background: #fdde59;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.succeed h1:first-child {
+    margin-top: 0;
+}
+
+#success-code {
+    display: block;
+    position: absolute;
+    width: 50%;
+    left: -9999px;
+}
+
+.vignette {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    box-shadow: 0 0 200px rgba(25, 25, 30, 0.9) inset;
+}
+
+#success-command {
+    display: block;
+}

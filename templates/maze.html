@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/src/maze/css/index.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.10.0/js/md5.min.js"></script>
+    <title>Mazon</title>
+</head>
+<body>
+
+<div id="main-container">
+    <canvas id="canvas"></canvas>
+</div>
+<div class="vignette"></div>
+<div class="succeed" id="success-window">
+    <h1>대박!</h1>
+    <p>퍼즐을 성공했습니다!</p>
+    <label for="success-code"></label><input id="success-code"/>
+    <code id="success-command"></code>
+    <button onclick="copySuccessCode()">이 버튼을 누르면 퍼즐 성공 커맨드를 복사합니다.</button>
+</div>
+
+<script src="/src/maze/js/index.js"></script>
+
+</body>
+</html>

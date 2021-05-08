@@ -12,3 +12,4 @@ from .music_cache import MusicCache
 from .member_cache import MemberCache
 from .language import LanguageName
 from .announcement_manager import AnnouncementManager
+from .web_manager import web_app
