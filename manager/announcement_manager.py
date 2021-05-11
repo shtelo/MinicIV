@@ -4,11 +4,12 @@ from discord import TextChannel
 from discord.ext.commands import Bot
 from pymysql.cursors import DictCursor
 
-from util import database
+from util import database, get_const
 
 
 class AnnouncementManager:
-    def __init__(self, client: Bot, channel: Optional[TextChannel] = None, max_cool_message: int = 100):
+    def __init__(self, client: Bot, channel: Optional[TextChannel] = None,
+                 max_cool_message: int = get_const()['announcement-coolcount']):
         self.client = client
         self.channel = channel
         self.max_cool_message = max_cool_message

@@ -141,12 +141,11 @@ def create_maze(width: int, height: int) -> Tuple[int, Board, History]:
         else:
             break
 
-    with Image.new('RGB', (width * Cell.SIZE + 2 * PADDING, height * Cell.SIZE + 2 * PADDING)) as image:
-        for i in range(width):
-            for j in range(height):
-                board[j][i].draw(image)
-
-        # image.save('out.png')
+    # with Image.new('RGB', (width * Cell.SIZE + 2 * PADDING, height * Cell.SIZE + 2 * PADDING)) as image:
+    #     for i in range(width):
+    #         for j in range(height):
+    #             board[j][i].draw(image)
+    #     image.save('out.png')
 
     return int(time()), board, path
 
