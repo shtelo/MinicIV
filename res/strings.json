@@ -730,6 +730,37 @@
           "strings": {
             "succeed": "공지사항을 성공적으로 삭제했습니다.\n> `ID: {id}` {string}"
           }
+        },
+        "member_list": {
+          "name": [
+            "회원목록",
+            "会員目録"
+          ],
+          "description": "회원 목록 문서 링크를 확인합니다.",
+          "strings": {
+            "link": "https://docs.google.com/spreadsheets/d/1rcto7iFaxUtFxDGdBoIqiIlEMnFjh51YybVAejJOzlM/edit?usp=sharing"
+          }
+        },
+        "conversation_list": {
+          "name": [
+            "회의록",
+            "会議録"
+          ],
+          "description": "회의록 색인 링크를 확인합니다.",
+          "strings": {
+            "link": "https://docs.google.com/document/d/15rRzrvpSjmhn26vdcdMsygiarGaarTdOqXsHSyEGE5U/edit"
+          }
+        },
+        "admit": {
+          "name": [
+            "인정",
+            "認定"
+          ],
+          "description": "테스터로 인정합니다.",
+          "strings": {
+            "template": "{member}님은 이제 {tester_role}입니다!",
+            "for_partners": "{member}님이 테스터가 되었습니다. `$회원목록`을 업데이트해주세요. {partners_mention}"
+          }
         }
       }
     },

@@ -1,9 +1,9 @@
 from asyncio import wait
 from datetime import timedelta, datetime
 
-from discord import Member, Embed, Message
+from discord import Member, Embed, Message, Guild
 from discord.ext import commands
-from discord.ext.commands import Bot, Context
+from discord.ext.commands import Bot, Context, MemberConverter
 
 from manager import WeekDay, ShteloTime, AnnouncementManager
 from util import get_strings, get_const
@@ -113,6 +113,37 @@ class Shtelo(commands.Cog):
         await ctx.send(strings()['command']['announcement.delete']['strings']['succeed'].format(
             string=announcement['string'], id=id_))
         self.announcement_manager.refresh_announcements()
+
+    @commands.command(aliases=strings()['command']['member_list']['name'],
+                      description=strings()['command']['member_list']['description'])
+    async def member_list(self, ctx: Context):
+        await ctx.send(strings()['command']['member_list']['strings']['link'])
+
+    @commands.command(aliases=strings()['command']['conversation_list']['name'],
+                      description=strings()['command']['conversation_list']['description'])
+    async def conversation_list(self, ctx: Context):
+        await ctx.send(strings()['command']['conversation_list']['strings']['link'])
+
+    @commands.command(aliases=strings()['command']['admit']['name'],
+                      description=strings()['command']['admit']['description'])
+    @commands.has_role('파트너')
+    async def admit(self, ctx: Context, member: Member):
+        tester_role = ctx.guild.get_role(get_const()['role']['tester'])
+        partner_role = ctx.guild.get_role(get_const()['role']['partner'])
+        separator_entitle_role = ctx.guild.get_role(get_const()['role']['separator_entitle'])
+        separator_deck_role = ctx.guild.get_role(get_const()['role']['separator_deck'])
+        partners_text_channel = ctx.guild.get_channel(get_const()['channel']['partners'])
+
+        await wait((
+            ctx.send(strings()['command']['admit']['strings']['template'].format(
+                member=member.mention,
+                tester_role=tester_role.mention)),
+            ctx.message.add_reaction(get_const()['emoji']['white_check_mark']),
+            member.add_roles(tester_role, separator_entitle_role, separator_deck_role),
+            partners_text_channel.send(strings()['command']['admit']['strings']['for_partners'].format(
+                member=member.mention, partners_mention=partner_role.mention
+            ))
+        ))
 
 
 def setup(client: Bot):

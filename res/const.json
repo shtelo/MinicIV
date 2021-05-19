@@ -1,4 +1,10 @@
 {
+  "role": {
+    "tester": 650534580259913728,
+    "partner": "650591166370414599",
+    "separator_entitle": 759399916291227648,
+    "separator_deck": 759392766416519168
+  },
   "color": {
     "sch_vanilla": 16637529
   },
@@ -6,7 +12,8 @@
     "shtelo": 650533223520010261
   },
   "channel": {
-    "central_park": 650534592406880267
+    "central_park": 650534592406880267,
+    "partners": 650591167230246943
   },
   "shtelo_times": [
     [2018, 7, 27],
@@ -18,5 +25,8 @@
     [2022, 1, 22],
     [2022, 7, 21]
   ],
-  "announcement-coolcount": 45
+  "announcement-coolcount": 20,
+  "emoji": {
+    "white_check_mark": "✅"
+  }
 }
