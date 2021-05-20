@@ -321,7 +321,7 @@ class Extraessential(commands.Cog):
                 else ':exclamation:' if date_ >= today - timedelta(days=1) \
                 else ''
             member = await self.member_cache.get_member(member_id, ctx)  # todo things if member is not on server
-            if member is None:
+            if member is None or strike == 1 and not emoji:
                 continue
             description.append(strings()['command']['attendance.leaderboard']['strings']['template'].format(
                 place=i + 1 - offset, member=member.display_name, strike=strike, emoji=emoji))
