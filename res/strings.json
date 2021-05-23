@@ -758,7 +758,7 @@
           ],
           "description": "테스터로 인정합니다.",
           "strings": {
-            "template": "{member}님은 이제 {tester_role}입니다!",
+            "template": "{member}님은 이제 **테스터**입니다!",
             "for_partners": "{member}님이 테스터가 되었습니다. `$회원목록`을 업데이트해주세요. {partners_mention}"
           }
         }

@@ -136,8 +136,7 @@ class Shtelo(commands.Cog):
 
         await wait((
             ctx.send(strings()['command']['admit']['strings']['template'].format(
-                member=member.mention,
-                tester_role=tester_role.mention)),
+                member=member.mention)),
             ctx.message.add_reaction(get_const()['emoji']['white_check_mark']),
             member.add_roles(tester_role, separator_entitle_role, separator_deck_role),
             partners_text_channel.send(strings()['command']['admit']['strings']['for_partners'].format(
