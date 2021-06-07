@@ -16,7 +16,7 @@ def strings():
 class Shtelo(commands.Cog):
     def __init__(self, client: Bot):
         self.client = client
-        self.announcement_manager = AnnouncementManager(self.client, max_cool_message=80)
+        self.announcement_manager = AnnouncementManager(self.client)
 
     @commands.Cog.listener()
     async def on_message(self, message: Message):
