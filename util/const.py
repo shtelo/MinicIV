@@ -19,7 +19,7 @@ def get_strings():
 def load_const():
     global __const
 
-    with open('./res/const.json', 'r') as file:
+    with open('./res/const.json', 'r', encoding='utf-8') as file:
         __const = load(file)
 
 
