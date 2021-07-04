@@ -1,4 +1,4 @@
-const padding = 200, mazePadding = 20;
+let padding = 200, mazePadding = 20;
 const canvas = document.querySelector("#canvas");
 const context = canvas.getContext("2d");
 const mainContainer = document.querySelector("#main-container");
@@ -10,7 +10,8 @@ const fps = 60;
 
 const getMaze = async () => {
     const response = await fetch('/maze/get');
-    return response.json();
+    let data = response.json();
+    return data;
 };
 
 const getMazeCode = async () => {
@@ -275,9 +276,10 @@ window.addEventListener("resize", (() => {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         readyMazeCanvas();
+        padding = canvas.height * 0.1;
     };
     result();
-    return result
+    return result;
 })());
 
 window.addEventListener("mousemove", event => {
