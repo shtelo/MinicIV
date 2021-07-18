@@ -271,9 +271,9 @@ class Util(commands.Cog):
                       description=strings()['command']['analysis']['description'])
     async def analysis(self, ctx: Context, id_: int):
         time = datetime.fromtimestamp(((id_ >> 22) + 1420070400000) // 1000)
-        worker = (id_ >> 17) % 1 << 5
-        process = (id_ >> 12) % 1 << 5
-        index = id_ % 1 << 12
+        worker = (id_ >> 17) % (1 << 5)
+        process = (id_ >> 12) % (1 << 5)
+        index = id_ % (1 << 12)
         embed = Embed(title=strings()['command']['analysis']['strings']['title'],
                       description=strings()['command']['analysis']['strings']['description'].format(id=id_),
                       color=get_const()['color']['sch_vanilla'])
