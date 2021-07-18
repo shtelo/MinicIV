@@ -270,12 +270,13 @@ class Util(commands.Cog):
     @commands.command(aliases=strings()['command']['analysis']['name'],
                       description=strings()['command']['analysis']['description'])
     async def analysis(self, ctx: Context, id_: int):
-        time = datetime.fromtimestamp((id_ >> 22 + 1420070400000) // 1000)
+        time = datetime.fromtimestamp(((id_ >> 22) + 1420070400000) // 1000)
         worker = (id_ >> 17) % 1 << 5
         process = (id_ >> 12) % 1 << 5
         index = id_ % 1 << 12
         embed = Embed(title=strings()['command']['analysis']['strings']['title'],
-                      description=strings()['command']['analysis']['strings']['description'].format(id=id_))
+                      description=strings()['command']['analysis']['strings']['description'].format(id=id_),
+                      color=get_const()['color']['sch_vanilla'])
         embed.add_field(name=strings()['command']['analysis']['strings']['time'], value=str(time), inline=False)
         embed.add_field(name=strings()['command']['analysis']['strings']['worker'], value=str(worker))
         embed.add_field(name=strings()['command']['analysis']['strings']['process'], value=str(process))
