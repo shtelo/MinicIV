@@ -644,6 +644,21 @@
             "command_template": "> **`{command}`**\n> - {description}",
             "command_not_found": "커맨드 `{command_name}`{eul_reul} 찾을 수 없습니다."
           }
+        },
+        "analysis": {
+          "name": [
+            "분석",
+            "分析"
+          ],
+          "description": "디스코드 아이디를 분석합니다.",
+          "strings": {
+            "title": "디스코드 아이디 분석",
+            "description": "아이디: `{id}`",
+            "time": "시간",
+            "worker": "워커",
+            "process": "프로세스",
+            "index": "증복 방지 코드"
+          }
         }
       }
     },

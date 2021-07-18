@@ -267,6 +267,21 @@ class Util(commands.Cog):
                 embed.add_field(name=cog_name.title(), value='\n'.join(param), inline=False)
             await ctx.send(embed=embed)
 
+    @commands.command(aliases=strings()['command']['analysis']['name'],
+                      description=strings()['command']['analysis']['description'])
+    async def analysis(self, ctx: Context, id_: int):
+        time = datetime.fromtimestamp((id_ >> 22 + 1420070400000) // 1000)
+        worker = (id_ >> 17) % 1 << 5
+        process = (id_ >> 12) % 1 << 5
+        index = id_ % 1 << 12
+        embed = Embed(title=strings()['command']['analysis']['strings']['title'],
+                      description=strings()['command']['analysis']['strings']['description'].format(id=id_))
+        embed.add_field(name=strings()['command']['analysis']['strings']['time'], value=str(time), inline=False)
+        embed.add_field(name=strings()['command']['analysis']['strings']['worker'], value=str(worker))
+        embed.add_field(name=strings()['command']['analysis']['strings']['process'], value=str(process))
+        embed.add_field(name=strings()['command']['analysis']['strings']['index'], value=str(index))
+        await ctx.send(embed=embed)
+
 
 def setup(client: Bot):
     client.add_cog(Util(client))
