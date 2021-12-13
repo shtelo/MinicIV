@@ -285,7 +285,7 @@ class Util(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(aliases=strings()['command']['zasokese_calendar']['name'],
-                     description=strings()['command']['zasokese_calendar']['description'])
+                      description=strings()['command']['zasokese_calendar']['description'])
     async def zasokese_calendar(self, ctx: Context, year: int = -1, month: int = -1, day: int = -1,
                                 hour: int = -1, minute: int = -1, second: int = -1):
         time = datetime.now()
@@ -299,6 +299,49 @@ class Util(commands.Cog):
         zasoque_time = ZasokDatetime.get_from_datetime(time)
         await ctx.send(strings()['command']['zasokese_calendar']['strings']['template'].format(
             year=zasoque_time.year, month=zasoque_time.month, day=zasoque_time.day))
+
+    @commands.command(aliases=strings()['command']['lofanfashasch_id']['name'],
+                      description=strings()['command']['lofanfashasch_id']['description'])
+    async def lofanfashasch_id(self, ctx: Context):
+        message = await ctx.send(strings()['command']['lofanfashasch_id']['strings']['notice'])
+        await wait((message.add_reaction(get_strings()['emoji']['o']),
+                    message.add_reaction(get_strings()['emoji']['x'])))
+
+        def check(reaction_, user_):
+            return reaction_.emoji in (get_strings()['emoji']['o'], get_strings()['emoji']['x']) and \
+                   user_ == ctx.message.author
+
+        try:
+            reaction, user = await self.client.wait_for('reaction_add', timeout=60.0, check=check)
+        except AsyncioTimeoutError:
+            await message.edit(content=strings()['command']['lofanfashasch_id']['strings']['timeout'].format(
+                mention=ctx.author.mention))
+            return
+        else:
+            if reaction.emoji == get_strings()['emoji']['x']:
+                await message.edit(content=strings()['command']['lofanfashasch_id']['strings']['cancelled'].format(
+                    mention=ctx.author.mention))
+                return
+
+        zasoque_year = ZasokDatetime.get_from_datetime(message.created_at).year
+
+        if ctx.guild.get_role(918751472194306048) in ctx.author.roles:
+            role_number = 1
+        elif ctx.guild.get_role(918756432021712997) in ctx.author.roles:
+            role_number = 2
+        elif ctx.guild.get_role(918756464594661406) in ctx.author.roles:
+            role_number = 3
+        elif ctx.guild.get_role(918756488623824926) in ctx.author.roles:
+            role_number = 4
+        else:
+            role_number = 5
+
+        duplication_prevent = str(ctx.author.id)[0]
+        nick = f'{role_number}{zasoque_year:05d}{duplication_prevent} {ctx.author.name}'
+
+        await ctx.author.edit(nick=nick),
+        await ctx.send(strings()['command']['lofanfashasch_id']['strings']['success'].format(
+            name=nick, euro=euro(nick)))
 
 
 def setup(client: Bot):

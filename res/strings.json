@@ -668,6 +668,18 @@
           "strings": {
             "template": ":calendar_spiral: 자소크는 지금: `{year}년 {day}번째 {month}월`"
           }
+        },
+        "lofanfashasch_id": {
+          "name": [
+            "아이디"
+          ],
+          "description": "로판파샤스 아이디를 발급받습니다.",
+          "strings": {
+            "notice": "로판파샤스 아이디를 발급받겠습니까?",
+            "success": ":name_badge: 이름이 `{name}`{euro} 설정되었습니다.",
+            "timeout": "{mention} 시간이 초과되어 작업이 취소되었습니다.",
+            "cancelled": "{mention} 사용자가 작업을 취소했습니다."
+          }
         }
       }
     },
