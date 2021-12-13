@@ -286,8 +286,17 @@ class Util(commands.Cog):
 
     @commands.command(aliases=strings()['command']['zasokese_calendar']['name'],
                      description=strings()['command']['zasokese_calendar']['description'])
-    async def zasokese_calendar(self, ctx: Context):
-        zasoque_time = ZasokDatetime.get_from_datetime(datetime.now())
+    async def zasokese_calendar(self, ctx: Context, year: int = -1, month: int = -1, day: int = -1,
+                                hour: int = -1, minute: int = -1, second: int = -1):
+        time = datetime.now()
+        time = datetime(
+            year=year if year != -1 else time.year,
+            month=month if month != -1 else time.month,
+            day=day if day != -1 else time.day,
+            hour=hour if hour != -1 else time.hour,
+            minute=minute if minute != -1 else time.minute,
+            second=second if second != -1 else time.second)
+        zasoque_time = ZasokDatetime.get_from_datetime(time)
         await ctx.send(strings()['command']['zasokese_calendar']['strings']['template'].format(
             year=zasoque_time.year, month=zasoque_time.month, day=zasoque_time.day))
 
