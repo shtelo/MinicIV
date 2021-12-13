@@ -12,6 +12,7 @@ from manager.language import LANGUAGE_UNKNOWN
 from util import load_strings, get_strings, get_const
 from util.naver_api import language_detect, translate, TRANSLATABLES
 from util.postposition import euro, eul_reul, i_ga, a_ya, eun_neun
+from zasok_datetime import ZasokDatetime
 
 
 def strings():
@@ -282,6 +283,13 @@ class Util(commands.Cog):
         embed.add_field(name=strings()['command']['analysis']['strings']['process'], value=str(process))
         embed.add_field(name=strings()['command']['analysis']['strings']['index'], value=str(index))
         await ctx.send(embed=embed)
+
+    @commands.command(aliases=strings()['command']['zasokese_calendar']['name'],
+                     description=strings()['command']['zasokese_calendar']['description'])
+    async def zasokese_calendar(self, ctx: Context):
+        zasoque_time = ZasokDatetime.get_from_datetime(datetime.now())
+        await ctx.send(strings()['command']['zasokese_calendar']['strings']['template'].format(
+            year=zasoque_time.year, month=zasoque_time.month, day=zasoque_time.day))
 
 
 def setup(client: Bot):

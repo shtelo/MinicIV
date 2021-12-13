@@ -659,6 +659,16 @@
             "process": "프로세스",
             "index": "증복 방지 코드"
           }
+        },
+        "zasokese_calendar": {
+          "name": [
+            "zasokese_calendar",
+            "자소크력"
+          ],
+          "description": "자소크력 날짜를 확인합니다.",
+          "strings": {
+            "template": ":calendar_spiral: 자소크는 지금: `{year}년 {day}번째 {month}월`"
+          }
         }
       }
     },
