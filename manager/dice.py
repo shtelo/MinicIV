@@ -1,5 +1,6 @@
 import re
 from random import randint
+from typing import Tuple
 
 from discord.ext import commands
 from discord.ext.commands import Context
@@ -22,15 +23,18 @@ class Dice(commands.Converter):
     def __str__(self):
         return f'{self.count if self.count > 1 else ""}D{self.dice}'
 
-    def roll(self) -> int:
+    def roll(self) -> Tuple[int, list]:
         """
         객체(self)의 주사위 정보에 따라 주사위를 굴리고 그 숫자를 반환합니다.
         :return: 굴린 주사위 눈의 합
         """
         number = 0
+        numbers = list()
         for _ in range(self.count):
-            number += randint(1, self.dice)
-        return number
+            noon = randint(1, self.dice)
+            number += noon
+            numbers.append(noon)
+        return number, numbers
 
     def set_count(self, count: int):
         """

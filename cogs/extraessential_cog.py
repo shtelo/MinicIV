@@ -121,7 +121,9 @@ class Extraessential(commands.Cog):
             await ctx.send(strings()['command']['dice']['strings']['too_many_dice'])
             return
 
-        await ctx.send(strings()['command']['dice']['strings']['template'].format(dice=dice, number=dice.roll()))
+        number, numbers = dice.roll()
+        await ctx.send(strings()['command']['dice']['strings']['template'].format(
+            dice=dice, numbers=', '.join(map(str, numbers)), number=number))
 
     @commands.command(aliases=strings()['command']['random']['name'],
                       description=strings()['command']['random']['description'])
